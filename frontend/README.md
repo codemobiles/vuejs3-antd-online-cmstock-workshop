@@ -6,3 +6,10 @@
 - yarn create vite
 - yarn
 - yarn dev
+
+# Setup Antd on Vue3
+
+- https://antdv.com/components/overview
+- yarn add ant-design-vue @ant-design/icons-vue
+- Edit main.ts
+- Check the example from https://antdv.com/components/button in App.vue
