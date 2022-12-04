@@ -13,3 +13,7 @@
 - yarn add ant-design-vue @ant-design/icons-vue
 - Edit main.ts
 - Check the example from https://antdv.com/components/button in App.vue
+
+# Setup tailwind on Vue3
+
+-https://tailwindcss.com/docs/guides/vite#vue

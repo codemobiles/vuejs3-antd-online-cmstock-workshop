@@ -11,6 +11,12 @@
       <template #icon><SearchOutlined /></template>
       Search
     </a-button>
+
+    <h1
+      class="text-red-400 bg-yellow-400 text-3xl font-bold underline border-double border-4 border-indigo-600 rounded-xl"
+    >
+      Hello world!
+    </h1>
   </div>
 </template>
 
