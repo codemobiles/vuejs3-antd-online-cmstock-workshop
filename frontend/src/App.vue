@@ -11,7 +11,7 @@
           minHeight: '280px',
         }"
       >
-        Content
+        <Content />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -20,11 +20,13 @@
 // import Menu from "./components/core/Menu.vue";
 import Menu from "@/components/core/Menu.vue";
 import Header from "./components/core/Header.vue";
+import Content from "./components/core/Content.vue";
 import { defineComponent, ref } from "vue";
 export default defineComponent({
   components: {
     Menu,
     Header,
+    Content,
   },
   setup() {
     return {

@@ -1,23 +1,34 @@
 <template>
-  <a-layout-sider :collapsed="collapsed" :trigger="null" collapsible>
+  <a-layout-sider
+    :collapsed="collapsed"
+    :trigger="null"
+    collapsible
+    style="
+      background: url(src/assets/bg-menu-2.png);
+      background-color: #213140 !important;
+      background-repeat: no-repeat;
+      background-size: cover;
+    "
+  >
     <img
       @click="toggleCollapsed"
       src="@/assets/05-banner-vuejs.png"
       alt=""
       style="width: 100%"
     />
-    <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
-      <a-menu-item key="1">
-        <user-outlined />
-        <span>nav 1</span>
+    <a-menu
+      v-model:selectedKeys="selectedKeys"
+      theme="dark"
+      mode="inline"
+      style="background-color: transparent"
+    >
+      <a-menu-item key="1" @click="router.push('/stock')">
+        <CodepenOutlined />
+        <span>Stock</span>
       </a-menu-item>
-      <a-menu-item key="2">
-        <video-camera-outlined />
-        <span>nav 2</span>
-      </a-menu-item>
-      <a-menu-item key="3">
-        <upload-outlined />
-        <span>nav 3</span>
+      <a-menu-item key="2" @click="$router.push('/report')">
+        <LineChartOutlined />
+        <span>Report</span>
       </a-menu-item>
     </a-menu>
   </a-layout-sider>
@@ -25,31 +36,24 @@
 
 <script lang="ts">
 import { ref } from "vue";
-import {
-  UserOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-} from "@ant-design/icons-vue";
+import * as Icons from "@ant-design/icons-vue";
+import { useRouter } from "vue-router";
 export default {
   name: "Menu",
   props: ["collapsed"],
   emits: ["update:collapsed"],
   components: {
-    UserOutlined,
-    VideoCameraOutlined,
-    UploadOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
+    ...Icons,
   },
   setup(props, { emit }) {
     const selectedKeys = ref<string[]>(["2"]);
+    const router = useRouter();
+
     const toggleCollapsed = () => {
       emit("update:collapsed", !props.collapsed);
     };
 
-    return { selectedKeys, toggleCollapsed };
+    return { selectedKeys, toggleCollapsed, router };
   },
 };
 </script>
