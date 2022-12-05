@@ -1,10 +1,10 @@
 <template>
-  <RouterView />
+  <h1>Stock</h1>
 </template>
 
 <script lang="ts">
 export default {
-  name: "App",
+  name: "Stock",
 };
 </script>
 
