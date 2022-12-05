@@ -17,3 +17,8 @@
 # Setup tailwind on Vue3
 
 -https://tailwindcss.com/docs/guides/vite#vue
+
+# Setup alias import @
+
+- yarn add --dev @types/node
+- edit vite.config.ts (resolver)
