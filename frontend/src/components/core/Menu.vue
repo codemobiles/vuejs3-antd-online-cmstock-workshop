@@ -1,6 +1,11 @@
 <template>
   <a-layout-sider :collapsed="collapsed" :trigger="null" collapsible>
-    <div class="logo" @click="toggleCollapsed" />
+    <img
+      @click="toggleCollapsed"
+      src="@/assets/05-banner-vuejs.png"
+      alt=""
+      style="width: 100%"
+    />
     <a-menu v-model:selectedKeys="selectedKeys" theme="dark" mode="inline">
       <a-menu-item key="1">
         <user-outlined />
