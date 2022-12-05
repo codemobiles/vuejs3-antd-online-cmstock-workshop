@@ -19,6 +19,14 @@ const routes: Array<vueRouter.RouteRecordRaw> = [
     name: "stock",
     component: Stock,
   },
+  {
+    path: "/",
+    redirect: "/login",
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/login", // page not found
+  },
 ];
 const router = vueRouter.createRouter({
   history: vueRouter.createWebHistory(import.meta.env.BASE_URL),
