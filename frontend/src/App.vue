@@ -2,18 +2,7 @@
   <a-layout class="h-screen">
     <Menu v-model:collapsed="collapsed" />
     <a-layout>
-      <a-layout-header style="background: #fff; padding: 0">
-        <menu-unfold-outlined
-          v-if="collapsed"
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        />
-        <menu-fold-outlined
-          v-else
-          class="trigger"
-          @click="() => (collapsed = !collapsed)"
-        />
-      </a-layout-header>
+      <Header v-model:collapsed="collapsed" />
       <a-layout-content
         :style="{
           margin: '24px 16px',
@@ -28,14 +17,13 @@
   </a-layout>
 </template>
 <script lang="ts">
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import Menu from "./components/core/Menu.vue";
+import Header from "./components/core/Header.vue";
 import { defineComponent, ref } from "vue";
 export default defineComponent({
   components: {
     Menu,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
+    Header,
   },
   setup() {
     return {
