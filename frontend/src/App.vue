@@ -17,7 +17,8 @@
   </a-layout>
 </template>
 <script lang="ts">
-import Menu from "./components/core/Menu.vue";
+// import Menu from "./components/core/Menu.vue";
+import Menu from "@/components/core/Menu.vue";
 import Header from "./components/core/Header.vue";
 import { defineComponent, ref } from "vue";
 export default defineComponent({
