@@ -1,5 +1,7 @@
 <template>
-  <RouterView />
+  <div class="flex flex-col justify-center items-center">
+    <RouterView />
+  </div>
 </template>
 
 <script lang="ts">
