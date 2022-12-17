@@ -5,7 +5,7 @@
       style="
         box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px 0px;
         width: 300px;
-        height: 500px;
+        height: 520px;
       "
     >
       <template #cover>
