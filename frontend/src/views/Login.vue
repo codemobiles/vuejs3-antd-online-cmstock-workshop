@@ -73,7 +73,7 @@ import type { FormProps } from "ant-design-vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useRouter } from "vue-router";
-import api from "@/services/auth_api";
+import api from "@/services/api";
 export default {
   components: {
     UserOutlined,
