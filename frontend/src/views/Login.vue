@@ -86,15 +86,22 @@ export default {
       password: "1234567890a",
     });
 
-    const handleFinish = (values: any) => {
+    const handleFinish = async (values: any) => {
       // alert(JSON.stringify(values));
       // https://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=songs
 
-      axios
-        .post("http://localhost:8081/api/v2/login", values)
-        .then((result) => {
-          console.log(JSON.stringify(result.data));
-        });
+      // axios
+      //   .post("http://localhost:8081/api/v2/login", values)
+      //   .then((result) => {
+      //     console.log(JSON.stringify(result.data));
+      //   });
+
+      const result = await axios.post(
+        "http://localhost:8081/api/v2/login",
+        values
+      );
+
+      alert(JSON.stringify(result.data));
     };
 
     const handleFinishFailed = (error: any) => {
