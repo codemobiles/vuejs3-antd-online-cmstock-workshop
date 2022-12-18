@@ -40,7 +40,12 @@
         <a-form-item>
           <a-space direction="vertical" style="width: 100%" size="small">
             <a-button block type="primary" html-type="submit">Log in</a-button>
-            <a-button block type="default" html-type="button">
+            <a-button
+              block
+              type="default"
+              html-type="button"
+              @click="$router.push('/register')"
+            >
               Register
             </a-button>
 
@@ -67,6 +72,7 @@ import type { UnwrapRef } from "vue";
 import type { FormProps } from "ant-design-vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
+import { useRouter } from "vue-router";
 
 export default {
   components: {
@@ -122,7 +128,13 @@ export default {
       ],
     };
 
-    return { formState, handleFinish, handleReset, handleFinishFailed, rules };
+    return {
+      formState,
+      handleFinish,
+      handleReset,
+      handleFinishFailed,
+      rules,
+    };
   },
 };
 </script>
