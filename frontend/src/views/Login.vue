@@ -73,7 +73,7 @@ import type { FormProps } from "ant-design-vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import httpClient from "@/services/httpClient";
 export default {
   components: {
     UserOutlined,
@@ -87,20 +87,7 @@ export default {
     });
 
     const handleFinish = async (values: any) => {
-      // alert(JSON.stringify(values));
-      // https://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=songs
-
-      // axios
-      //   .post("http://localhost:8081/api/v2/login", values)
-      //   .then((result) => {
-      //     console.log(JSON.stringify(result.data));
-      //   });
-
-      const result = await axios.post(
-        "http://localhost:8081/api/v2/login",
-        values
-      );
-
+      const result = await httpClient.post("/login", values);
       alert(JSON.stringify(result.data));
     };
 
