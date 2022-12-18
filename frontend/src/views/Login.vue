@@ -73,7 +73,7 @@ import type { FormProps } from "ant-design-vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useRouter } from "vue-router";
-
+import axios from "axios";
 export default {
   components: {
     UserOutlined,
@@ -87,7 +87,14 @@ export default {
     });
 
     const handleFinish = (values: any) => {
-      alert(JSON.stringify(values));
+      // alert(JSON.stringify(values));
+      // https://codemobiles.com/adhoc/youtubes/index_new.php?username=admin&password=password&type=songs
+
+      axios
+        .post("http://localhost:8081/api/v2/login", values)
+        .then((result) => {
+          console.log(JSON.stringify(result.data));
+        });
     };
 
     const handleFinishFailed = (error: any) => {
@@ -112,7 +119,7 @@ export default {
     let validatePassword = async (_rule: Rule, value: string) => {
       if (value === "") {
         return Promise.reject("Please input the username");
-      } else if (value.length <= 10) {
+      } else if (value.length <= 1) {
         return Promise.reject("Passwowrd must greater than 10 letters");
       } else {
         return Promise.resolve();
