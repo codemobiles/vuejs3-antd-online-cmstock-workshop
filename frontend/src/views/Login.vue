@@ -61,6 +61,13 @@
           >
         </a-form-item> -->
       </a-form>
+      <span @click="store.increment"
+        >{{ store.count }} | {{ store.doubleCount }}</span
+      >
+      <br />
+      <span @click="storeV2.increment"
+        >{{ storeV2.count }} | {{ storeV2.doubleCount }}</span
+      >
     </a-card>
   </div>
 </template>
@@ -74,6 +81,8 @@ import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useRouter } from "vue-router";
 import api from "@/services/api";
+import { useCounterStore } from "@/store/useCounterStore";
+import { useCounterStoreV2 } from "@/store/useCounterStoreV2";
 export default {
   components: {
     UserOutlined,
@@ -81,6 +90,9 @@ export default {
   },
   name: "Login",
   setup() {
+    const store = useCounterStore();
+    const storeV2 = useCounterStoreV2();
+
     const formState = reactive<User>({
       username: "admin",
       password: "1234",
@@ -134,9 +146,13 @@ export default {
       handleReset,
       handleFinishFailed,
       rules,
+      store,
+      storeV2,
     };
   },
 };
 </script>
 
 <style></style>
+
+function useCounterStore() { throw new Error('Function not implemented.'); }
