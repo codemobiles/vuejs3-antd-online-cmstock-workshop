@@ -73,6 +73,7 @@ import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useRouter } from "vue-router";
 import { useCounterV1Store } from "@/store/useCounterV1Store";
+import { useAuthStore } from "@/store/useAuthStore";
 export default {
   components: {
     UserOutlined,
@@ -81,6 +82,7 @@ export default {
   name: "Register",
   setup() {
     const counterV1Store = useCounterV1Store();
+    const authStore = useAuthStore();
 
     const formState = reactive<User>({
       username: "",
@@ -88,7 +90,8 @@ export default {
     });
 
     const handleFinish = (values: any) => {
-      alert(JSON.stringify(values));
+      // alert(JSON.stringify(values));
+      authStore.register(values);
     };
 
     const handleFinishFailed = (error: any) => {
@@ -136,6 +139,7 @@ export default {
       handleFinishFailed,
       rules,
       counterV1Store,
+      authStore,
     };
   },
 };
