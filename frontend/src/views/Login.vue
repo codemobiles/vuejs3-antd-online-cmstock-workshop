@@ -39,11 +39,6 @@
 
         <a-form-item>
           <a-space direction="vertical" style="width: 100%" size="small">
-            <a-alert
-              v-if="authStore.fetchingStatus === FetchingStatus.failed"
-              message="Error Text"
-              type="error"
-            />
             <a-button block type="primary" html-type="submit">Log in</a-button>
             <a-button
               block
@@ -59,23 +54,7 @@
             </a-button>
           </a-space>
         </a-form-item>
-
-        <!-- <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-          <a-button type="ghost" html-type="button" @click="handleReset"
-            >Reset</a-button
-          >
-        </a-form-item> -->
       </a-form>
-
-      <!-- V1 -->
-      <span @click="counterV1Store.increment"
-        >{{ counterV1Store.count }} | {{ counterV1Store.doubleCount }}</span
-      >
-      <br />
-      <!-- V2 -->
-      <span @click="counterV2Store.increment"
-        >{{ counterV2Store.count }} | {{ counterV2Store.doubleCount }}</span
-      >
     </a-card>
   </div>
 </template>
@@ -91,8 +70,6 @@ import { useRouter } from "vue-router";
 import api from "@/services/api";
 import { useCounterV1Store } from "@/store/useCounterV1Store";
 import { useCounterV2Store } from "@/store/useCounterV2Store";
-import { useAuthStore } from "@/store/useAuthStore";
-import { FetchingStatus } from "@/models/fetchingStatus.enum";
 
 export default {
   components: {
@@ -103,7 +80,6 @@ export default {
   setup() {
     const counterV1Store = useCounterV1Store();
     const counterV2Store = useCounterV2Store();
-    const authStore = useAuthStore();
 
     const formState = reactive<User>({
       username: "admin",
@@ -111,8 +87,7 @@ export default {
     });
 
     const handleFinish = async (values: any) => {
-      // api.login(values);
-      authStore.login(values);
+      api.login(values);
     };
 
     const handleFinishFailed = (error: any) => {
@@ -161,8 +136,6 @@ export default {
       rules,
       counterV1Store,
       counterV2Store,
-      authStore,
-      FetchingStatus,
     };
   },
 };

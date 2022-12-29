@@ -6,7 +6,7 @@ import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
 
 export const useAuthStore = defineStore("auth", () => {
-  const profile = reactive<Session>({ isLoggedIn: false });
+  const session = reactive<Session>({ isLoggedIn: false });
   const fetchingStatus = ref<FetchingStatus>(FetchingStatus.init);
 
   async function login(user: User) {
@@ -14,18 +14,19 @@ export const useAuthStore = defineStore("auth", () => {
       fetchingStatus.value = FetchingStatus.fetching;
       let result = await api.login(user);
       if (result == true) {
-        profile.username = user.username;
-        profile.isLoggedIn = true;
+        session.username = user.username;
+        session.isLoggedIn = true;
         fetchingStatus.value = FetchingStatus.success;
       } else {
-        profile.isLoggedIn = false;
+        session.isLoggedIn = false;
         fetchingStatus.value = FetchingStatus.failed;
       }
     } catch (e) {
-      profile.isLoggedIn = false;
+      session.isLoggedIn = false;
       fetchingStatus.value = FetchingStatus.failed;
     }
   }
+
   async function register(user: User) {
     try {
       fetchingStatus.value = FetchingStatus.fetching;
@@ -40,5 +41,5 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  return { login, register, fetchingStatus, profile };
+  return { session, fetchingStatus, login, register };
 });
