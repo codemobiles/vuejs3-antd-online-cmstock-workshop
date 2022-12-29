@@ -72,13 +72,9 @@
 
 <script lang="ts">
 import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-import { defineComponent, reactive, computed } from "vue";
-import type { UnwrapRef } from "vue";
-import type { FormProps } from "ant-design-vue";
+import { reactive } from "vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
-import { useRouter } from "vue-router";
-import api from "@/services/api";
 import { useAuthStore } from "@/store/useAuthStore";
 import { FetchingStatus } from "@/models/fetchingStatus.enum";
 

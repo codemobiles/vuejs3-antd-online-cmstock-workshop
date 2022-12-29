@@ -39,7 +39,13 @@
 
         <a-form-item>
           <a-space direction="vertical" style="width: 100%" size="small">
-            <a-button block type="primary" html-type="submit">Confirm</a-button>
+            <a-button
+              block
+              type="primary"
+              html-type="submit"
+              :disabled="authStore.fetchingStatus === FetchingStatus.fetching"
+              >Confirm</a-button
+            >
             <a-button
               block
               type="default"
@@ -50,17 +56,13 @@
             </a-button>
           </a-space>
         </a-form-item>
-
-        <!-- <a-form-item :wrapper-col="{ offset: 8, span: 16 }">
-          <a-button type="ghost" html-type="button" @click="handleReset"
-            >Reset</a-button
-          >
-        </a-form-item> -->
       </a-form>
-      <span @click="counterV1Store.increment"
-        >{{ counterV1Store.count }} | {{ counterV1Store.doubleCount }}</span
-      >
     </a-card>
+    <a-alert
+      v-if="authStore.fetchingStatus === FetchingStatus.failed"
+      message="Register failed"
+      type="error"
+    />
   </div>
 </template>
 
@@ -72,7 +74,9 @@ import type { FormProps } from "ant-design-vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useRouter } from "vue-router";
-import { useCounterV1Store } from "@/store/useCounterV1Store";
+import { useAuthStore } from "@/store/useAuthStore";
+import { FetchingStatus } from "@/models/fetchingStatus.enum";
+
 export default {
   components: {
     UserOutlined,
@@ -80,7 +84,7 @@ export default {
   },
   name: "Register",
   setup() {
-    const counterV1Store = useCounterV1Store();
+    const authStore = useAuthStore();
 
     const formState = reactive<User>({
       username: "",
@@ -88,7 +92,6 @@ export default {
     });
 
     const handleFinish = (values: any) => {
-      // alert(JSON.stringify(values));
       authStore.register(values);
     };
 
@@ -136,7 +139,8 @@ export default {
       handleReset,
       handleFinishFailed,
       rules,
-      counterV1Store,
+      authStore,
+      FetchingStatus,
     };
   },
 };

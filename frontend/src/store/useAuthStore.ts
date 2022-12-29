@@ -32,6 +32,8 @@ export const useAuthStore = defineStore("auth", () => {
   async function register(user: User) {
     try {
       fetchingStatus.value = FetchingStatus.fetching;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       let result = await api.register(user);
       if (result == true) {
         fetchingStatus.value = FetchingStatus.success;
