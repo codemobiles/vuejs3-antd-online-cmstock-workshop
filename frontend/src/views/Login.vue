@@ -77,7 +77,6 @@ import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
 import { useAuthStore } from "@/store/useAuthStore";
 import { FetchingStatus } from "@/models/fetchingStatus.enum";
-import router from "@/router";
 
 export default {
   components: {
@@ -87,12 +86,6 @@ export default {
   name: "Login",
   setup() {
     const authStore = useAuthStore();
-
-    onMounted(() => {
-      if (authStore.session.isLoggedIn) {
-        router.push("/stock");
-      }
-    });
 
     const formState = reactive<User>({
       username: "admin",
