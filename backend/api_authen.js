@@ -13,7 +13,7 @@ router.post("/login", async (req, res) => {
       if (bcrypt.compareSync(password, result.password)) {
         res.json({
           result: constants.kResultOk,
-          message: JSON.stringify(result)
+          message: JSON.stringify(result),
         });
       } else {
         res.json({ result: constants.kResultNok, message: "Invalid password" });
@@ -28,8 +28,18 @@ router.post("/login", async (req, res) => {
 
 router.post("/register", async (req, res) => {
   try {
+    const { username, password } = req.body;
+    const foundUser = await user.findOne({ where: { username: username } });
+    if (foundUser) {
+      // duplicate username
+      res.json({
+        result: constants.kResultNok,
+        message: JSON.stringify(error),
+      });
+    }
+
     console.log("register: " + JSON.stringify(req.body));
-    req.body.password = await bcrypt.hash(req.body.password, 8);
+    req.body.password = await bcrypt.hash(password, 8);
     const result = await user.create(req.body);
     res.json({ result: constants.kResultOk, message: JSON.stringify(result) });
   } catch (error) {
