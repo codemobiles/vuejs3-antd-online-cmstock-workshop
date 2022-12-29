@@ -1,8 +1,11 @@
 <template>
   <a-layout class="h-screen">
-    <Menu v-model:collapsed="collapsed" />
+    <Menu v-model:collapsed="collapsed" v-if="authStore.session.isLoggedIn" />
     <a-layout>
-      <Header v-model:collapsed="collapsed" />
+      <Header
+        v-model:collapsed="collapsed"
+        v-if="authStore.session.isLoggedIn"
+      />
       <a-layout-content
         :style="{
           margin: '24px 16px',
@@ -22,6 +25,8 @@ import Menu from "@/components/core/Menu.vue";
 import Header from "./components/core/Header.vue";
 import Content from "./components/core/Content.vue";
 import { defineComponent, ref } from "vue";
+import { useAuthStore } from "@/store/useAuthStore";
+
 export default defineComponent({
   components: {
     Menu,
@@ -29,9 +34,13 @@ export default defineComponent({
     Content,
   },
   setup() {
+    const authStore = useAuthStore();
+    authStore.restoreSession();
+    
     return {
       selectedKeys: ref<string[]>(["2"]),
       collapsed: ref<boolean>(false),
+      authStore,
     };
   },
 });

@@ -2,8 +2,10 @@ import { FetchingStatus } from "@/models/fetchingStatus.enum";
 import { Session } from "@/models/session.model";
 import { User } from "@/models/user.model";
 import api from "@/services/api";
+import { server } from "@/services/constants";
 import { defineStore } from "pinia";
 import { ref, reactive } from "vue";
+import router from "@/router";
 
 export const useAuthStore = defineStore("auth", () => {
   const session = reactive<Session>({ isLoggedIn: false });
@@ -45,5 +47,23 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  return { session, fetchingStatus, login, register };
+  function restoreSession() {
+    const token = localStorage.getItem(server.TOKEN_KEY);
+    const username = localStorage.getItem(server.USERNAME);
+    if (token && username) {
+      session.isLoggedIn = true;
+      session.username = username;
+    } else {
+      session.isLoggedIn = false;
+    }
+  }
+
+  function logout() {
+    localStorage.clear();
+    session.isLoggedIn = undefined;
+    session.username = undefined;
+    router.push("/login");
+  }
+
+  return { session, fetchingStatus, login, register, restoreSession, logout };
 });
