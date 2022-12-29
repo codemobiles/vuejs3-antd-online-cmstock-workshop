@@ -11,7 +11,6 @@ const login = async (values: User) => {
     router.push("/stock");
     return true;
   } else {
-    alert("login failed");
     return false;
   }
 };
