@@ -60,7 +60,7 @@
     </a-card>
     <a-alert
       v-if="authStore.fetchingStatus === FetchingStatus.failed"
-      message="Register failed"
+      message="Register failed - duplicated username"
       type="error"
     />
   </div>
