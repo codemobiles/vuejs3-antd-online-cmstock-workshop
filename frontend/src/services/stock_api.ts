@@ -1,36 +1,31 @@
-import type { User } from '@/models/user.model'
 import httpClient from '@/services/httpClient'
 import { server } from '@/services/constants'
-import router from '@/router'
 import type { Product } from '@/models/product.model'
-const getProducts = async () => {
-  let result = await httpClient.get(server.PRODUCT_URL)
-  if (result.status == 200) {
-    return result.data
-  }
-  return []
-}
 
-export const getProductById = (id: string) => {
+
+export const getProducts = () => {
+  return httpClient.get(server.PRODUCT_URL);
+};
+
+
+export const getProductByKeyword = (keyword: any) => {
+  return httpClient.get(server.PRODUCT_URL + `/name/${keyword}`);
+};
+
+export const getProductById = (id: any) => {
   return httpClient.get(server.PRODUCT_URL + `/id/${id}`)
 }
 
-const addProduct = async (data: FormData) => {
-  return await httpClient.post(server.PRODUCT_URL, data)
+export const addProduct = (data: FormData) => {
+  return httpClient.post(server.PRODUCT_URL, data)
 }
 
 // in data have id
-const updateProduct = async (data: Product) => {
-  return await httpClient.post(server.PRODUCT_URL, data)
+export const updateProduct = (data: any) => {
+  return httpClient.put(server.PRODUCT_URL, data)
 }
-const deleteProduct = async (id: string) => {
-  return await httpClient.post(`${server.PRODUCT_URL}/id/${id}`)
+export const deleteProduct = (id: string) => {
+  return httpClient.delete(`${server.PRODUCT_URL}/id/${id}`)
 }
 
-export default {
-  getProducts,
-  addProduct,
-  deleteProduct,
-  updateProduct,
-  getProductById
-}
+
