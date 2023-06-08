@@ -1,5 +1,5 @@
 <template>
-  <a-card hoverable>
+  <a-card hoverable class="tw-rounded-md">
     <a-row align="center" justify="center" class="tw-h-full">
       <a-col :span="16">
         <a-card-meta :title="props.title?.toUpperCase()">

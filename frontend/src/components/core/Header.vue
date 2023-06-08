@@ -1,15 +1,17 @@
 <template>
   <a-layout-header class="tw-p-0 tw-bg-green-600 tw-text-white">
     <a-row justify="space-between" align="center" class="tw-mx-6">
-      <div>
+      <a-row align="center" class="tw-items-center">
         <menu-unfold-outlined v-if="collapsed" class="trigger" @click="toggleCollapse" />
         <menu-fold-outlined v-else class="trigger" @click="toggleCollapse" />
         <span class="tw-px-2">CMStock</span>
-      </div>
+      </a-row>
       <div>
-        <a-button type="text">
-          <LogoutOutlined class="tw-text-white" @click="authStore.logout" />
-          <span class="tw-text-white"> Logout </span>
+        <a-button type="text" @click="authStore.logout">
+          <a-row align="center" class="tw-items-center">
+            <LogoutOutlined class="tw-text-white tw-pr-2" />
+            <span class="tw-text-white"> Logout </span>
+          </a-row>
         </a-button>
       </div>
     </a-row>
