@@ -1,4 +1,4 @@
 export interface Session {
-  username?: string;
-  isLoggedIn?: boolean;
+  username?: string
+  isLoggedIn: boolean
 }

@@ -1,49 +1,36 @@
 <template>
-  <a-layout class="h-screen">
-    <Menu v-model:collapsed="collapsed" v-if="authStore.session.isLoggedIn" />
+  <a-layout class="tw-h-screen">
+    <Sidebar
+      v-model:collapsed="collapsed"
+      v-if="!['/login', '/register'].includes($route.path)"
+    ></Sidebar>
     <a-layout>
       <Header
         v-model:collapsed="collapsed"
-        v-if="authStore.session.isLoggedIn"
-      />
-      <a-layout-content
-        :style="{
-          margin: '24px 16px',
-          padding: '24px',
-          background: '#fff',
-          minHeight: '280px',
-        }"
-      >
-        <Content />
-      </a-layout-content>
+        v-if="!['/login', '/register'].includes($route.path)"
+      ></Header>
+      <Content></Content>
     </a-layout>
   </a-layout>
 </template>
 <script lang="ts">
-// import Menu from "./components/core/Menu.vue";
-import Menu from "@/components/core/Menu.vue";
-import Header from "./components/core/Header.vue";
-import Content from "./components/core/Content.vue";
-import { defineComponent, ref } from "vue";
-import { useAuthStore } from "@/store/useAuthStore";
-
+import { defineComponent, ref } from 'vue'
+import Header from '@/components/core/Header.vue'
+import Content from '@/components/core/Content.vue'
+import Sidebar from '@/components/core/Sidebar.vue'
 export default defineComponent({
   components: {
-    Menu,
     Header,
     Content,
+    Sidebar
   },
   setup() {
-    const authStore = useAuthStore();
-    authStore.restoreSession();
-    
     return {
-      selectedKeys: ref<string[]>(["2"]),
-      collapsed: ref<boolean>(false),
-      authStore,
-    };
-  },
-});
+      selectedKeys: ref<string[]>(['1']),
+      collapsed: ref<boolean>(false)
+    }
+  }
+})
 </script>
 <style>
 #components-layout-demo-custom-trigger .trigger {
@@ -56,6 +43,12 @@ export default defineComponent({
 
 #components-layout-demo-custom-trigger .trigger:hover {
   color: #1890ff;
+}
+
+#components-layout-demo-custom-trigger .logo {
+  height: 32px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 16px;
 }
 
 .site-layout .site-layout-background {

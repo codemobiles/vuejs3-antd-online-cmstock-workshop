@@ -1,152 +1,100 @@
 <template>
-  <div>
-    <a-card
-      hoverable
-      style="
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px 0px;
-        width: 300px;
-        height: 520px;
-      "
+  <a-card hoverable class="tw-w-[360px] tw-h-fit">
+    <template #cover>
+      <img alt="example" src="@/assets/03-vuejs-login.png" />
+    </template>
+    <a-card-meta title="Login" class="tw-mb-2">
+      <!-- <template #description>www.instagram.com</template> -->
+    </a-card-meta>
+    <a-form
+      :model="formState"
+      name="login"
+      :rules="rules"
+      autocomplete="off"
+      @finish="onFinish"
+      @finishFailed="onFinishFailed"
     >
-      <template #cover>
-        <img alt="example" src="@/assets/03-vuejs-login.png" />
-      </template>
+      <a-form-item name="username">
+        <a-input v-model:value="formState.username" placeholder="Username">
+          <template #prefix>
+            <UserOutlined class="tw-placeholder-slate-800"></UserOutlined>
+          </template>
+        </a-input>
+      </a-form-item>
 
-      <h1 className="text-2xl font-bold pb-3">Login</h1>
+      <a-form-item name="password">
+        <a-input-password v-model:value="formState.password" placeholder="Password">
+          <template #prefix>
+            <LockOutlined class="tw-placeholder-slate-800"></LockOutlined>
+          </template>
+        </a-input-password>
+      </a-form-item>
 
-      <a-form
-        layout="vertical"
-        :model="formState"
-        :rules="rules"
-        @finish="handleFinish"
-        @finishFailed="handleFinishFailed"
-      >
-        <a-form-item name="username">
-          <a-input placeholder="Username" v-model:value="formState.username">
-            <template #prefix
-              ><UserOutlined style="color: rgba(0, 0, 0, 0.25)"
-            /></template>
-          </a-input>
-        </a-form-item>
-
-        <a-form-item name="password" type="password" placeholder="Password">
-          <a-input-password v-model:value="formState.password">
-            <template #prefix
-              ><LockOutlined style="color: rgba(0, 0, 0, 0.25)"
-            /></template>
-          </a-input-password>
-        </a-form-item>
-
-        <a-form-item>
-          <a-space direction="vertical" style="width: 100%" size="small">
-            <a-button
-              :disabled="authStore.fetchingStatus === FetchingStatus.fetching"
-              block
-              type="primary"
-              html-type="submit"
-              >Log in</a-button
-            >
-            <a-button
-              block
-              type="default"
-              html-type="button"
-              @click="$router.push('/register')"
-            >
-              Register
-            </a-button>
-
-            <a-button block type="text" html-type="button" @click="handleReset">
-              Reset
-            </a-button>
-          </a-space>
-        </a-form-item>
-      </a-form>
-    </a-card>
-    <a-alert
-      v-if="authStore.fetchingStatus === FetchingStatus.failed"
-      message="Login failed"
-      type="error"
-    />
-  </div>
+      <a-form-item>
+        <a-space direction="vertical" size="small" class="tw-w-full">
+          <a-button
+            type="primary"
+            html-type="submit"
+            block
+            :disabled="authStore.fetchingStatus === FetchingStatus.fetching"
+            >Login</a-button
+          >
+          <a-button type="ghost" @click="$router.push('/register')" block>Register</a-button>
+          <a-button type="text" html-type="submit" block @click="onReset">Reset</a-button>
+        </a-space>
+      </a-form-item>
+      <a-alert
+        v-if="authStore.fetchingStatus === FetchingStatus.failed"
+        message="Login Failed"
+        description="Please try again."
+        type="error"
+        showIcon
+      />
+    </a-form>
+  </a-card>
 </template>
+<script lang="ts" setup>
+import type { User } from '@/models/user.model'
+import { UserOutlined, LockOutlined } from '@ant-design/icons-vue'
+import type { Rule } from 'ant-design-vue/lib/form'
+import { defineComponent, onMounted, reactive } from 'vue'
+import api from '@/services/api'
+import { useAuthStore } from '@/stores/useAuthStore'
+import { FetchingStatus } from '@/models/fetchingStatus'
 
-<script lang="ts">
-import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
-import { reactive, onMounted } from "vue";
-import type { User } from "@/models/user.model";
-import { Rule } from "ant-design-vue/lib/form";
-import { useAuthStore } from "@/store/useAuthStore";
-import { FetchingStatus } from "@/models/fetchingStatus.enum";
+const formState = reactive<User>({
+  username: 'admin',
+  password: '1234'
+})
+const authStore = useAuthStore()
 
-export default {
-  components: {
-    UserOutlined,
-    LockOutlined,
-  },
-  name: "Login",
-  setup() {
-    const authStore = useAuthStore();
+let validateUsername = async (_rule: Rule, value: string) => {
+  if (value === '') {
+    return Promise.reject('Please input the username')
+  }
+  return Promise.resolve()
+}
+let validatePassword = async (_rule: Rule, value: string) => {
+  if (value === '') {
+    return Promise.reject('Please input the password')
+  }
+  return Promise.resolve()
+}
 
-    const formState = reactive<User>({
-      username: "admin",
-      password: "1234",
-    });
+const rules: Record<string, Rule[]> = {
+  username: [{ required: true, validator: validateUsername, trigger: 'change' }],
+  password: [{ required: true, validator: validatePassword, trigger: 'change' }]
+}
 
-    const handleFinish = async (values: any) => {
-      authStore.login(values);
-    };
-
-    const handleFinishFailed = (error: any) => {
-      // alert(JSON.stringify(error));
-    };
-
-    const handleReset = () => {
-      formState.username = "";
-      formState.password = "";
-    };
-
-    let validateUsername = async (_rule: Rule, value: string) => {
-      if (value === "") {
-        return Promise.reject("Please input the username");
-      } else if (value.length <= 4) {
-        return Promise.reject("username must greater than 4 letters");
-      } else {
-        return Promise.resolve();
-      }
-    };
-
-    let validatePassword = async (_rule: Rule, value: string) => {
-      if (value === "") {
-        return Promise.reject("Please input the username");
-      } else if (value.length <= 1) {
-        return Promise.reject("Passwowrd must greater than 10 letters");
-      } else {
-        return Promise.resolve();
-      }
-    };
-
-    const rules: Record<string, Rule[]> = {
-      username: [
-        { required: true, validator: validateUsername, trigger: "change" },
-      ],
-      password: [
-        { required: true, validator: validatePassword, trigger: "change" },
-      ],
-    };
-
-    return {
-      formState,
-      handleFinish,
-      handleReset,
-      handleFinishFailed,
-      rules,
-      authStore,
-      FetchingStatus,
-    };
-  },
-};
+const onFinish = async (values: any) => {
+  await authStore.login(values)
+}
+const onFinishFailed = (errorInfo: any) => {
+  alert(JSON.stringify(errorInfo))
+  console.log('Failed:', errorInfo)
+}
+const onReset = () => {
+  formState.username = ''
+  formState.password = ''
+}
 </script>
-
-<style></style>
-
-function useCounterStore() { throw new Error('Function not implemented.'); }

@@ -1,16 +1,24 @@
-import { createApp } from "vue";
-import "./style.css";
-import App from "./App.vue";
-import "ant-design-vue/dist/antd.css"; // or 'ant-design-vue/dist/antd.less'
-import Antd from "ant-design-vue";
-import router from "./router";
-import { createPinia } from "pinia";
+import './assets/main.css'
+import './style.css'
 
-// createApp(App).mount("#app");
+import { createApp } from 'vue'
+import { createPinia } from 'pinia'
 
-const app = createApp(App);
-const pinia = createPinia();
-app.use(pinia);
-app.use(router);
-app.use(Antd);
-app.mount("#app");
+import App from './App.vue'
+import router from './router'
+
+import 'ant-design-vue/dist/antd.css' // or 'ant-design-vue/dist/antd.less'
+import Antd from 'ant-design-vue'
+
+import axios from 'axios'
+
+const axiosInstance = axios.create({
+  withCredentials: true
+})
+
+const app = createApp(App)
+app.use(createPinia())
+app.use(Antd)
+app.use(router)
+app.config.globalProperties.$axios = { ...axiosInstance }
+app.mount('#app')

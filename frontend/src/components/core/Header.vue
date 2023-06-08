@@ -1,57 +1,48 @@
 <template>
-  <a-layout-header class="bg-green-700 pl-7 pr-5 text-white">
-    <div style="display: flex; flex-direction: row; align-items: center">
-      <menu-unfold-outlined
-        v-if="collapsed"
-        class="trigger"
-        @click="toggleCollapsed"
-      />
-      <menu-fold-outlined v-else class="trigger" @click="toggleCollapsed" />
-      <span style="flex-grow: 1; margin-left: 10px; font-size: 18px"
-        >CMStock</span
-      >
-      <a-button type="text" class="p-0" @click="authStore.logout">
-        <LogoutOutlined style="color: white" class="trigger" />
-        <span style="color: white; font-size: 18px">Logout</span>
-      </a-button>
-    </div>
+  <a-layout-header class="tw-p-0 tw-bg-green-600 tw-text-white">
+    <a-row justify="space-between" align="center" class="tw-mx-6">
+      <div>
+        <menu-unfold-outlined v-if="collapsed" class="trigger" @click="toggleCollapse" />
+        <menu-fold-outlined v-else class="trigger" @click="toggleCollapse" />
+        <span class="tw-px-2">CMStock</span>
+      </div>
+      <div>
+        <a-button type="text">
+          <LogoutOutlined class="tw-text-white" @click="authStore.logout" />
+          <span class="tw-text-white"> Logout </span>
+        </a-button>
+      </div>
+    </a-row>
   </a-layout-header>
 </template>
-
 <script lang="ts">
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  LogoutOutlined,
-} from "@ant-design/icons-vue";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from '@/stores/useAuthStore'
+import { MenuUnfoldOutlined, MenuFoldOutlined, LogoutOutlined } from '@ant-design/icons-vue'
+import { defineComponent, ref } from 'vue'
 
-export default {
-  name: "Header",
-  props: ["collapsed"],
-  emits: ["update:collapsed"],
+export default defineComponent({
   components: {
     MenuUnfoldOutlined,
     MenuFoldOutlined,
-    LogoutOutlined,
+    LogoutOutlined
+  },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false
+    }
   },
   setup(props, { emit }) {
-    const authStore = useAuthStore();
+    const authStore = useAuthStore()
+    const toggleCollapse = () => {
+      emit('update:collapsed', !props.collapsed)
+    }
 
-    const toggleCollapsed = () => {
-      emit("update:collapsed", !props.collapsed);
-    };
-
-    return { toggleCollapsed, authStore };
-  },
-};
+    return {
+      collapsed: ref<boolean>(false),
+      toggleCollapse,
+      authStore
+    }
+  }
+})
 </script>
-
-<style>
-.trigger {
-  font-size: 18px;
-  line-height: 64px;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-</style>

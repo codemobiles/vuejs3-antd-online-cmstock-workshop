@@ -1,24 +1,46 @@
-# commands
+# training-vue3-antd-tailwind
 
-- node --version
-- yarn --version
-- npm i -g yarn
-- yarn create vite
-- yarn
-- yarn dev
+This template should help get you started developing with Vue 3 in Vite.
 
-# Setup Antd on Vue3
+## Recommended IDE Setup
 
-- https://antdv.com/components/overview
-- yarn add ant-design-vue @ant-design/icons-vue
-- Edit main.ts
-- Check the example from https://antdv.com/components/button in App.vue
+[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
 
-# Setup tailwind on Vue3
+## Type Support for `.vue` Imports in TS
 
--https://tailwindcss.com/docs/guides/vite#vue
+TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
 
-# Setup alias import @
+If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
 
-- yarn add --dev @types/node
-- edit vite.config.ts (resolver)
+1. Disable the built-in TypeScript Extension
+    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
+    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
+2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```
