@@ -7,4 +7,5 @@ module.exports = {
   },
   plugins: [],
   corePlugins: { preflight: false },
+  prefix: 'tw-'
 };
