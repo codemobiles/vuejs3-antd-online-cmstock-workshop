@@ -15,9 +15,11 @@
     "ant-design-vue": "^3.2.20",
     "axios": "^1.4.0",
     "chart.js": "^4.3.0",
+    "dayjs": "^1.11.8",
     "pinia": "^2.0.36",
     "url-join": "^5.0.0",
     "vue": "^3.3.2",
+    "vue-chart-3": "^3.1.8",
     "vue-chartjs": "^5.2.0",
     "vue-router": "^4.2.0"
   },
