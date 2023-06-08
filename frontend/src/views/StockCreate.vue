@@ -1,73 +1,46 @@
 <template>
-  <a-row align="center" justify="center" class="tw-w-full tw-h-full">
-    <a-card hoverable class="tw-w-[800px] tw-h-fit">
-      <a-row justify="center" class="tw-w-full">
-        <a-form
-          :rules="rules"
-          class="tw-w-full"
-          :model="formState"
-          name="validate_other"
-          v-bind="formItemLayout"
-          @finishFailed="handleFinishFailed"
-          @finish="handleFinish"
-        >
-          <a-form-item name="name" class="tw-flex tw-justify-center">
-            <a-input v-model:value="formState.name" placeholder="Name">
-              <template #prefix></template>
-            </a-input>
-          </a-form-item>
-          <a-form-item name="price" class="tw-flex tw-justify-center">
-            <a-input v-model:value="formState.price" placeholder="Price" type="number">
-              <template #prefix></template>
-            </a-input>
-          </a-form-item>
-          <a-form-item name="stock" class="tw-flex tw-justify-center">
-            <a-input v-model:value="formState.stock" placeholder="Stock" type="number">
-              <template #prefix></template>
-            </a-input>
-          </a-form-item>
+  <a-row align="center" justify="center" class="tw-w-full">
+    <a-card
+      class="ant-card-body"
+      style="box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px 0px; width: 700px"
+    >
+      <template #title>
+        <a-tag color="success" class="tw-px-4 tw-py-2">
+          <a-row align="center" class="tw-h-full tw-items-center">
+            <PlusCircleFilled class="tw-text-[1rem] tw-pr-2" />
+            <span class="tw-font-bold tw-text-[1.5rem]">Create product</span>
+          </a-row>
+        </a-tag>
+      </template>
+      <a-form
+        :label-col="{ span: 3 }"
+        :rules="rules"
+        :model="formState"
+        autocomplete="off"
+        @finish="onSubmit"
+      >
+        <a-form-item labelAlign="right" label="Name" name="name" has-feedback>
+          <a-input v-model:value="formState.name" />
+        </a-form-item>
+        <a-form-item labelAlign="right" label="Price" name="price" has-feedback>
+          <a-input-number style="width: 100%" v-model:value="formState.price" />
+        </a-form-item>
+        <a-form-item labelAlign="right" label="Stock" name="stock" has-feedback>
+          <a-input-number style="width: 100%" type="number" v-model:value="formState.stock" />
+        </a-form-item>
+        <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+          <input type="file" @change="onFileSelected" />
+        </a-form-item>
 
-          <a-form-item
-            name="upload"
-            extra="Upload product image here"
-            class="tw-flex tw-justify-center"
-          >
-            <a-upload
-              v-model:fileList="formState.upload"
-              name="upload"
-              list-type="picture"
-              :before-upload="handleBeforeUpload"
-              :customRequest="handleCustomRequest"
-              :showUploadList="false"
-              @preview="handlePreview"
+        <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+          <a-row align="center" justify="center" class="tw-w-full">
+            <a-card
+              v-if="formState.imageURL"
+              class="tw-rounded-md tw-drop-shadow-sm tw-w-full"
+              hoverable
+              @click="() => (previewVisible = true)"
             >
-              <a-button>
-                <template #icon><UploadOutlined /></template>
-                Click to upload
-              </a-button>
-            </a-upload>
-            <div class="tw-my-2">
-              <a-alert type="warning" message="Uploading..." banner v-if="isUploading"></a-alert>
-              <a-alert
-                type="success"
-                message="Image ready to upload!"
-                banner
-                v-else-if="uploadSuccess"
-              />
-            </div>
-            <a-card v-if="previewImage">
-              <a-skeleton-image v-if="isUploading" />
-              <img
-                v-else
-                class="tw-h-[200px]"
-                :src="previewImage"
-                alt="Uploaded Image"
-                @click="
-                  () => {
-                    previewVisible = true
-                  }
-                "
-              />
+              <img :src="formState.imageURL!" class="tw-w-full tw-h-[300px] tw-object-contain" />
             </a-card>
             <a-modal
               :visible="previewVisible"
@@ -75,158 +48,109 @@
               :footer="null"
               @cancel="handleCancel"
             >
-              <img alt="example" style="width: 100%" :src="previewImage" />
+              <img alt="preview image" class="tw-w-full tw-h-[300px]" :src="formState.imageURL!" />
             </a-modal>
-          </a-form-item>
+          </a-row>
+        </a-form-item>
 
-          <a-form-item class="tw-flex tw-justify-center">
-            <a-row align="center" justify="end">
-              <a-button type="ghosted" @click="$router.push('/stock')" class="tw-mr-2"
-                >Cancel</a-button
-              >
-              <a-button type="primary" html-type="submit">Confirm</a-button>
-            </a-row>
-          </a-form-item>
-        </a-form>
-      </a-row>
+        <a-form-item :wrapper-col="{ span: 24 }">
+          <a-row align="center" justify="end" :gutter="[10, 10]">
+            <a-button type="primary" html-type="submit">Create</a-button>
+            <a-button style="margin-left: 10px" @click="$router.push('/stock')">Cancel</a-button>
+          </a-row>
+        </a-form-item>
+      </a-form>
     </a-card>
   </a-row>
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
-import { UploadOutlined, InboxOutlined } from '@ant-design/icons-vue'
-import type { Rule } from 'ant-design-vue/lib/form'
-import type { UploadProps } from 'ant-design-vue'
+import { defineComponent, reactive, ref, toRaw } from 'vue'
+import { Form } from 'ant-design-vue'
 import api from '@/services/api'
-import { useRouter } from 'vue-router'
-
-function getBase64(file: File) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.readAsDataURL(file)
-    reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
-  })
-}
+import router from '@/router'
+import type { Rule } from 'ant-design-vue/lib/form'
+import { PlusCircleFilled } from '@ant-design/icons-vue'
 
 export default defineComponent({
   components: {
-    UploadOutlined,
-    InboxOutlined
+    PlusCircleFilled
   },
-
   setup() {
-    const router = useRouter()
-    const formItemLayout = {
-      labelCol: { span: 6 },
-      wrapperCol: { span: 14 }
-    }
-
-    const formState = reactive<Record<string, any>>({
-      name: '',
-      price: '',
-      stock: '',
-      upload: []
-    })
     const previewVisible = ref(false)
-    const previewImage = ref('')
     const previewTitle = ref('')
-    const isUploading = ref(false)
-    const uploadSuccess = ref(false)
+    const formState = reactive({
+      name: '',
+      price: 0,
+      stock: 0,
+      image: null,
+      imageURL: null
+    })
 
-    let validateName = async (_rule: Rule, value: string) => {
-      if (value === '') {
-        return Promise.reject('Please input the name')
+    const onSubmit = async () => {
+      let formData = new FormData()
+      const { name, price, stock } = formState
+      formData.append('name', name)
+      formData.append('stock', stock.toString())
+      formData.append('price', price.toString())
+      if (formState.image) {
+        formData.append('image', formState.image!)
       }
-      return Promise.resolve()
-    }
-    let validatePrice = async (_rule: Rule, value: string) => {
-      if (value === '') {
-        return Promise.reject('Please input the price')
-      }
-      return Promise.resolve()
-    }
-    let validateStock = async (_rule: Rule, value: string) => {
-      if (value === '') {
-        return Promise.reject('Please input the stock')
-      }
-      return Promise.resolve()
-    }
-    let validateUploadFile = async (_rule: Rule, value: string) => {
-      if (value === '') {
-        return Promise.reject('Please input the uploadFile')
-      }
-      return Promise.resolve()
+      await api.addProduct(formData)
+      router.back()
     }
 
-    const rules: Record<string, Rule[]> = {
-      name: [{ required: true, validator: validateName, trigger: 'change' }],
-      price: [{ required: true, validator: validatePrice, trigger: 'change' }],
-      stock: [{ required: true, validator: validateStock, trigger: 'change' }],
-      upload: [{ required: true, validator: validateUploadFile, trigger: 'change' }]
-    }
-
-    const handleFinish = async (values: any) => {
-      try {
-        let formData = new FormData()
-        const { name, price, stock } = values
-        formData.append('name', name)
-        formData.append('stock', stock)
-        formData.append('price', price)
-        formData.append('image', formState.upload[0])
-        console.log(formData)
-        await api.addProduct(formData)
-        router.back()
-      } catch (error) {
-        console.log(error)
+    const onFileSelected = (event: any) => {
+      // for preview
+      const reader = new FileReader()
+      reader.onload = (event: any) => {
+        formState.imageURL = event.target.result
       }
-    }
-    const handleFinishFailed = (errorInfo: any) => {
-      console.log('Failed:', errorInfo)
-    }
-    const handleBeforeUpload = (event: any) => {
-      return true
-    }
-    const handleCustomRequest = (options: any) => {
-      isUploading.value = true
-      uploadSuccess.value = false
 
-      // Simulate the upload process
-      setTimeout(() => {
-        const { file } = options
-        previewImage.value = URL.createObjectURL(file)
-        isUploading.value = false
-        uploadSuccess.value = true
-      }, 1000)
+      // for upload
+      reader.readAsDataURL(event.target.files[0])
+      formState.image = event.target.files[0]
     }
+
     const handleCancel = () => {
       previewVisible.value = false
       previewTitle.value = ''
     }
 
-    const handlePreview = async (file: any) => {
-      if (!file.url && !file.preview) {
-        file.preview = (await getBase64(file.originFileObj)) as string
+    let validateText = (rule: Rule, value: string) => {
+      if (formState.name === '') {
+        return Promise.reject('Please input the name')
       }
-      previewImage.value = file.url || file.preview
-      previewVisible.value = true
-      previewTitle.value = file.name || file.url.substring(file.url.lastIndexOf('/') + 1)
+      return Promise.resolve()
     }
+
+    let validatePrice = (rule: Rule, value: string) => {
+      if (formState.price < 10) {
+        return Promise.reject('price must be a least at 100')
+      }
+      return Promise.resolve()
+    }
+
+    let validateStock = (rule: Rule, value: string) => {
+      if (formState.stock < 10) {
+        return Promise.reject('stock must be a least at 100')
+      }
+      return Promise.resolve()
+    }
+
+    const rules = {
+      name: [{ required: true, validator: validateText, trigger: 'change' }],
+      price: [{ validator: validatePrice, trigger: 'change' }],
+      stock: [{ validator: validateStock, trigger: 'change' }]
+    }
+
     return {
-      formState,
-      handleFinish,
-      handleFinishFailed,
-      formItemLayout,
       rules,
-      handleBeforeUpload,
-      handleCustomRequest,
-      handlePreview,
+      formState,
+      onSubmit,
+      onFileSelected,
       handleCancel,
-      previewImage,
       previewTitle,
-      previewVisible,
-      isUploading,
-      uploadSuccess
+      previewVisible
     }
   }
 })
