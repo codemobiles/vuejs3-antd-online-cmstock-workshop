@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, ref, defineProps } from 'vue'
+import { computed, defineComponent, ref,  } from 'vue'
 import { LineChart } from 'vue-chart-3'
 import { Chart, registerables } from 'chart.js'
 

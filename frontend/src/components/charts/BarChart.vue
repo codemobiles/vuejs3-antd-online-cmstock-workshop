@@ -6,7 +6,7 @@
           <span class="tw-font-bold tw-text-[0.8rem]"> Profit this day </span>
           <span class="tw-font-bold tw-text-[1.5rem] tw-block"> {{ filters.currency(1999) }} </span>
         </template>
-        <BarChart v-bind="barChartProps"  :options="options" class="tw-h-full md:tw-max-h-[200px]" />
+        <BarChart v-bind="barChartProps" :options="options" class="tw-h-full md:tw-max-h-[200px]" />
       </a-card>
     </a-col>
   </a-row>
@@ -15,7 +15,7 @@
 <script lang="ts" setup>
 import { Chart, registerables } from 'chart.js'
 import { BarChart, useBarChart } from 'vue-chart-3'
-import { ref, computed, defineComponent, defineProps } from 'vue'
+import { ref, computed, defineComponent } from 'vue'
 import filters from '@/services/filters'
 
 Chart.register(...registerables)
@@ -38,7 +38,7 @@ const options = ref({
 })
 
 const chartData = computed(() => ({
-  labels: ['SUN', 'MON', 'TUE', 'WED', 'THU','FRI','SAT'],
+  labels: ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'],
   datasets: [
     {
       data: props.data as any,
