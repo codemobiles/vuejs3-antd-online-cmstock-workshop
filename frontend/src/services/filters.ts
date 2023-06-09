@@ -11,6 +11,10 @@ export default {
   thousand(value: any) {
     return new Intl.NumberFormat("en-IN").format(value);
   },
+  formatTime(dateString: string) {
+    const date = dayjs(dateString);
+    return date.format("DD/MM/YY • hh:mm");
+  },
   formatDate(dateString: string) {
     const date = dayjs(dateString);
     return date.format("dddd MMMM D, YYYY hh:mm");
