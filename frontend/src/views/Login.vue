@@ -33,10 +33,12 @@
       <a-form-item>
         <a-space direction="vertical" size="small" class="tw-w-full">
           <a-button
+           
             type="primary"
             html-type="submit"
             block
             :disabled="authStore.fetchingStatus === FetchingStatus.fetching"
+            :loading="authStore.fetchingStatus === FetchingStatus.fetching"
             >Login</a-button
           >
           <a-button type="ghost" @click="$router.push('/register')" block>Register</a-button>
