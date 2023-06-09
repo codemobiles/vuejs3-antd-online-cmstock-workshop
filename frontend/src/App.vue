@@ -1,5 +1,5 @@
 <template>
-  <a-layout class="tw-h-screen">
+  <a-layout class="tw-min-h-screen">
     <Sidebar
       v-model:collapsed="collapsed"
       v-if="!['/login', '/register'].includes($route.path)"
