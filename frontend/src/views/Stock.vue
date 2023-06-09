@@ -7,7 +7,17 @@
     <a-col col :span="24" class="tw-mt-4">
       <a-row justify="end" class="tw-mb-4" :gutter="[10, 10]">
         <a-col :span="20">
-          <a-input-search   placeholder="input search text" enter-button @search="onSearch"  />
+          <a-auto-complete
+            class="tw-w-full"
+            v-model="searchValue"
+            placeholder="Input search text"
+            :options="autocompleteOptions"
+            @search="debouncedSearch"
+            @select="onSelect"
+            :default-active-first-option="false"
+            :filter-option="false"
+            :loading="isLoading"
+          />
         </a-col>
         <a-col :span="4">
           <a-button class="tw-w-full" type="primary" @click="$router.push('/stock-create')">
@@ -21,8 +31,8 @@
         </a-col>
       </a-row>
 
-      <a-card v-if="!isLoading" class="tw-rounded-md ">
-        <a-table :columns="columns" :data-source="stocks" :scroll="{ y: 400, x: 600 }">
+      <a-card v-if="!isLoading" class="tw-rounded-md">
+        <a-table :columns="columns" :data-source="stocks" :scroll="{ y: 700, x: 600 }">
           <template #headerCell="{ column }">
             <template v-if="column.key === 'name'">
               <span class="tw-font-medium"> Name </span>
@@ -32,17 +42,18 @@
           <template #bodyCell="{ column, record }">
             <template v-if="column.key === 'name'">
               <div class="tw-block tw-truncate tw-overflow-ellipsis">
-                <a @click="$router.push(`/stock-edit/${record.id}`)">
+                <a @click="routeToEdit(record.id)">
                   {{ record.name }}
                 </a>
               </div>
             </template>
             <template v-else-if="column.key === 'image'">
               <img
+                @click="routeToEdit(record.id)"
                 :src="getProductImage(record.image)"
                 lazy-src="https://picsum.photos/id/11/10/6"
                 aspect-ratio="1"
-                class="grey lighten-2"
+                class="tw-cursor-pointer tw-transition-all hover:tw-scale-[1.1]"
                 width="100"
                 height="100"
               />
@@ -56,10 +67,10 @@
               >
             </template>
             <template v-else-if="column.key === 'createdAt'">
-              <span>{{ filters.formatDate(record.createdAt) }}</span>
+              <span class="tw-text-gray-600">{{ filters.formatTime(record.createdAt) }}</span>
             </template>
             <template v-else-if="column.key === 'updatedAt'">
-              <span>{{ filters.formatDate(record.updatedAt) }}</span>
+              <span class="tw-text-gray-600">{{ filters.formatTime(record.updatedAt) }}</span>
             </template>
             <template v-else-if="column.key === 'action'">
               <a-row align="center">
@@ -94,8 +105,11 @@ import {
   QuestionCircleOutlined,
   DeleteOutlined
 } from '@ant-design/icons-vue'
-import { defineComponent, onMounted, reactive, ref } from 'vue'
+import { defineComponent, onMounted, reactive, ref, watch } from 'vue'
 import filters from '@/services/filters'
+import { useRouter } from 'vue-router'
+// @ts-ignore
+import { debounce } from 'lodash'
 
 interface StockCardInterface {
   title: string
@@ -114,6 +128,8 @@ export default defineComponent({
     DeleteOutlined
   },
   setup() {
+    const router = useRouter()
+
     const stockCardList = reactive<StockCardInterface[]>([
       { title: 'Total', amount: 1800, icon: 'ShoppingCartOutlined', color: '#039C52' },
       { title: 'Sold-out', amount: 12, icon: 'ExperimentOutlined', color: '#F18F15' },
@@ -158,9 +174,15 @@ export default defineComponent({
     ]
     let isLoading = ref(true)
     let stocks = ref([])
+    let searchValue = ref('')
+    const autocompleteOptions = ref([])
 
     const setLoading = (value: boolean) => {
       isLoading.value = value
+    }
+
+    const routeToEdit = (id: string) => {
+      router.push(`/stock-edit/${id}`)
     }
 
     const getColorTagByStock = (stock: number) => {
@@ -172,7 +194,24 @@ export default defineComponent({
       return 'error'
     }
 
-    const onSearch = async (value: any) => {
+    const debouncedSearch = debounce(async (value: string) => {
+      setLoading(true)
+      try {
+        if (value) {
+          let result = await api.getProductByKeyword(value)
+          stocks.value = result.data
+          autocompleteOptions.value = result.data.map((product: any) => ({
+            value: product.name
+          }))
+        } else {
+          loadProducts()
+        }
+      } finally {
+        setLoading(false)
+      }
+    }, 1000) // Adjust the debounce delay as needed
+
+    const onSelect = async (value: any) => {
       setLoading(true)
       try {
         if (value) {
@@ -205,6 +244,13 @@ export default defineComponent({
       loadProducts()
     })
 
+    watch(stocks, () => {
+      // Update autocomplete options when stocks change
+      autocompleteOptions.value = stocks.value.map((product: Product) => ({
+        value: product.name
+      })) as any
+    })
+
     return {
       stocks,
       columns,
@@ -213,8 +259,12 @@ export default defineComponent({
       onConfirmDelete,
       getProductImage,
       filters,
-      onSearch,
-      getColorTagByStock
+      getColorTagByStock,
+      routeToEdit,
+      searchValue,
+      autocompleteOptions,
+      debouncedSearch,
+      onSelect
     }
   }
 })
