@@ -2,30 +2,14 @@
   <a-table :dataSource="dataSource" :columns="columns" />
 </template>
 <script>
+import { useStockStore } from "@/stores/useStockStore";
 export default {
   setup() {
-    return {
-      dataSource: [
-        {
-          key: "1",
-          name: "Mike",
-          age: 32,
-          address: "10 Downing Street",
-        },
-        {
-          key: "2",
-          name: "John",
-          age: 42,
-          address: "10 Downing Street",
-        },
-        {
-          key: "2",
-          name: "John",
-          age: 42,
-          address: "10 Downing Street",
-        },
-      ],
+    const stockStore = useStockStore();
+    const dataSource = useStockStore.stocks;
 
+    return {
+      dataSource,
       columns: [
         {
           title: "Name",
@@ -33,14 +17,14 @@ export default {
           key: "name",
         },
         {
-          title: "Age",
-          dataIndex: "age",
-          key: "age",
+          title: "Stock",
+          dataIndex: "stock",
+          key: "stock",
         },
         {
-          title: "Address",
-          dataIndex: "address",
-          key: "address",
+          title: "Price",
+          dataIndex: "price",
+          key: "price",
         },
       ],
     };
