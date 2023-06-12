@@ -25,7 +25,7 @@ import Menu from "@/components/core/Menu.vue";
 import Header from "./components/core/Header.vue";
 import Content from "./components/core/Content.vue";
 import { defineComponent, ref } from "vue";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default defineComponent({
   components: {
@@ -36,7 +36,7 @@ export default defineComponent({
   setup() {
     const authStore = useAuthStore();
     authStore.restoreSession();
-    
+
     return {
       selectedKeys: ref<string[]>(["2"]),
       collapsed: ref<boolean>(false),

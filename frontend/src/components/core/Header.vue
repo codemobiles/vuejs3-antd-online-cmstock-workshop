@@ -24,7 +24,7 @@ import {
   MenuFoldOutlined,
   LogoutOutlined,
 } from "@ant-design/icons-vue";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 
 export default {
   name: "Header",

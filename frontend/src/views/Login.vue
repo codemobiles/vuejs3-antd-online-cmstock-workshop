@@ -75,7 +75,7 @@ import { UserOutlined, LockOutlined } from "@ant-design/icons-vue";
 import { reactive, onMounted } from "vue";
 import type { User } from "@/models/user.model";
 import { Rule } from "ant-design-vue/lib/form";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { FetchingStatus } from "@/models/fetchingStatus.enum";
 
 export default {

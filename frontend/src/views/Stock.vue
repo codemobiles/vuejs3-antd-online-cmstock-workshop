@@ -6,7 +6,7 @@ import { useStockStore } from "@/stores/useStockStore";
 export default {
   setup() {
     const stockStore = useStockStore();
-    const dataSource = useStockStore.stocks;
+    const dataSource = stockStore.stocks;
 
     return {
       dataSource,

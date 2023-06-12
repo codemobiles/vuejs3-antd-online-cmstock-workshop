@@ -3,7 +3,7 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import Stock from "@/views/Stock.vue";
 import Report from "@/views/Report.vue";
-import { useAuthStore } from "@/store/useAuthStore";
+import { useAuthStore } from "@/stores/useAuthStore";
 const routes: Array<vueRouter.RouteRecordRaw> = [
   {
     path: "/login",
