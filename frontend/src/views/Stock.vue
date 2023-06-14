@@ -1,65 +1,48 @@
 <template>
-  <a-table :dataSource="dataSource" :columns="columns" />
+  <a-table :dataSource="stockStore.stocks" :columns="columns" />
 </template>
-<script>
+<script lang="ts">
 import { useStockStore } from "@/stores/useStockStore";
 export default {
   setup() {
-
     const columns = [
       {
-        title: 'Image',
-        dataIndex: 'image'
+        title: "Image",
+        dataIndex: "image",
       },
       {
-        name: 'Name',
-        dataIndex: 'name',
-        width: '30%'
+        name: "Name",
+        dataIndex: "name",
+        width: "30%",
       },
       {
-        title: 'Price',
-        dataIndex: 'price'
+        title: "Price",
+        dataIndex: "price",
       },
       {
-        title: 'Stock',
-        dataIndex: 'stock'
+        title: "Stock",
+        dataIndex: "stock",
       },
       {
-        title: 'Created At',
-        dataIndex: 'createdAt'
+        title: "Created At",
+        dataIndex: "createdAt",
       },
       {
-        title: 'Updated At',
-        dataIndex: 'updatedAt'
+        title: "Updated At",
+        dataIndex: "updatedAt",
       },
       {
-        title: 'Action',
-        dataIndex: 'action'
-      }
-    ]
-    
+        title: "Action",
+        dataIndex: "action",
+      },
+    ];
+
     const stockStore = useStockStore();
-    const dataSource = stockStore.stocks;
+    stockStore.loadProducts();
 
     return {
-      dataSource,
-      columns: [
-        {
-          title: "Name",
-          dataIndex: "name",
-          key: "name",
-        },
-        {
-          title: "Stock",
-          dataIndex: "stock",
-          key: "stock",
-        },
-        {
-          title: "Price",
-          dataIndex: "price",
-          key: "price",
-        },
-      ],
+      stockStore,
+      columns,
     };
   },
 };

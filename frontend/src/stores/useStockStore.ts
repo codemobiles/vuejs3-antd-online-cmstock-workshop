@@ -5,35 +5,20 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import axios from "axios";
 
-const dummyData: Product[] = [
-  {
-    name: "Product1",
-    stock: 99,
-    price: 100,
-  },
-  {
-    name: "Product2",
-    stock: 99,
-    price: 100,
-  },
-  {
-    name: "Product3",
-    stock: 99,
-    price: 100,
-  },
-];
-
 export const useStockStore = defineStore("stock", () => {
   const autocompleteOptions = ref([]);
-  const stocks = ref<Product[]>(dummyData);
+  const stocks = ref<Product[]>([]);
   const fetchingStatus = ref<FetchingStatus>(FetchingStatus.init);
 
-  const getProducts = () => {
-    return axios.get("http://localhost:8081/api/v2/" + server.PRODUCT_URL);
+  const loadProducts = async () => {
+    const result = await axios.get(
+      "http://localhost:8081/api/v2/" + server.PRODUCT_URL
+    );
+    stocks.value = result.data;
   };
 
   return {
-    // loadProducts,
+    loadProducts,
     fetchingStatus,
     // getColorTagByStock,
     // setLoading,
