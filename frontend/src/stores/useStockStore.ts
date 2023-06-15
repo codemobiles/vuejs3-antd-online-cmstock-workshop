@@ -17,12 +17,16 @@ export const useStockStore = defineStore("stock", () => {
     stocks.value = result.data;
   };
 
+  const getProductImage = (image: string) => {
+    return "http://localhost:8081/images/" + image;
+  };
+
   return {
     loadProducts,
     fetchingStatus,
     // getColorTagByStock,
     // setLoading,
-    // getProductImage,
+    getProductImage,
     // isLoading,
     stocks,
     // onSelect,
