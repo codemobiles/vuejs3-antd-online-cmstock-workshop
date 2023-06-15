@@ -7,16 +7,18 @@
       :key="i"
       class="tw-mb-2 tw-px-2"
     >
-      <span>xxx</span>
+      <StockCard :title="item.title" />
     </a-col>
   </a-row>
 </template>
 <script lang="ts">
 import { useStockStore } from "@/stores/useStockStore";
+import StockCard from "@/components/cards/StockCard.vue";
 import filters from "@/services/filters";
 import { useRouter } from "vue-router";
 
 export default {
+  components: { StockCard },
   setup() {
     const stockCardList = [
       {
