@@ -1,7 +1,19 @@
 <template>
   <div>
     <span class="tw-text-yellow-500">xxx</span>
-    <a-table :dataSource="stockStore.stocks" :columns="columns" />
+    <a-table :dataSource="stockStore.stocks" :columns="columns">
+      <template #headerCell="{ column }">
+        <!-- Name col -->
+        <template v-if="column.dataIndex === 'name'">
+          <span class="tw-font-bold"> Name </span>
+        </template>
+
+        <!-- Price col -->
+        <template v-if="column.dataIndex === 'price'">
+          <span class="tw-font-bold"> Price </span>
+        </template>
+      </template>
+    </a-table>
   </div>
 </template>
 <script lang="ts">
