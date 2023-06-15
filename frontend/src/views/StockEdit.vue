@@ -1,11 +1,14 @@
 <template>
-  <div>Stock Edit</div>
+  <div>Stock Edit {{ route.params.id }}</div>
 </template>
 
 <script lang="ts">
+import { useRoute } from "vue-router";
 export default {
   setup() {
-    return {};
+    const route = useRoute();
+
+    return { route };
   },
 };
 </script>
