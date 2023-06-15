@@ -1,5 +1,8 @@
 <template>
-  <a-table :dataSource="stockStore.stocks" :columns="columns" />
+  <div>
+    <span class="tw-text-yellow-500">xxx</span>
+    <a-table :dataSource="stockStore.stocks" :columns="columns" />
+  </div>
 </template>
 <script lang="ts">
 import { useStockStore } from "@/stores/useStockStore";
