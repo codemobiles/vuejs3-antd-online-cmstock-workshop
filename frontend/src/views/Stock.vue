@@ -7,7 +7,7 @@
       :key="i"
       class="tw-mb-2 tw-px-2"
     >
-      <StockCard :title="item.title" />
+      <StockCard :title="item.title" :color="item.color" />
     </a-col>
   </a-row>
 </template>
