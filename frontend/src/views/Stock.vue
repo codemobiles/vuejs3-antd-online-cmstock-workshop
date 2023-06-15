@@ -12,7 +12,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'name'">
           <div class="tw-block tw-truncate tw-overflow-ellipsis">
-            <a>
+            <a @click="routeToEdit(record.id)">
               {{ record.name }}
             </a>
           </div>
@@ -71,6 +71,10 @@ export default {
   setup() {
     const columns = [
       {
+        title: "Id",
+        dataIndex: "id",
+      },
+      {
         title: "Image",
         dataIndex: "image",
       },
@@ -102,9 +106,16 @@ export default {
     ];
 
     const stockStore = useStockStore();
+    const router = useRouter();
+
     stockStore.loadProducts();
 
+    const routeToEdit = (id: string) => {
+      router.push(`/stock-edit/${id}`);
+    };
+
     return {
+      routeToEdit,
       stockStore,
       columns,
       filters,

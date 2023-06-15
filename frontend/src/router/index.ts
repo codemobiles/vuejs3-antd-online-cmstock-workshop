@@ -3,6 +3,9 @@ import Login from "@/views/Login.vue";
 import Register from "@/views/Register.vue";
 import Stock from "@/views/Stock.vue";
 import Report from "@/views/Report.vue";
+import StockCreate from "@/views/StockCreate.vue";
+import StockEdit from "@/views/StockEdit.vue";
+
 import { useAuthStore } from "@/stores/useAuthStore";
 const routes: Array<vueRouter.RouteRecordRaw> = [
   {
@@ -19,6 +22,18 @@ const routes: Array<vueRouter.RouteRecordRaw> = [
     path: "/stock",
     name: "stock",
     component: Stock,
+    meta: { isSecured: true },
+  },
+  {
+    path: "/stock-create",
+    name: "stock-create",
+    component: StockCreate,
+    meta: { isSecured: true },
+  },
+  {
+    path: "/stock-edit/:id",
+    name: "stock-edit",
+    component: StockEdit,
     meta: { isSecured: true },
   },
   {
