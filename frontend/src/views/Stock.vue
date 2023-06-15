@@ -1,28 +1,24 @@
 <template>
   <div>
-    <a-table :dataSource="stockStore.stocks" :columns="columns">
-      <!-- Header -->
+    <a-table
+      :columns="columns"
+      :data-source="stockStore.stocks"
+      :pagination="{ position: ['topRight'] }"
+    >
       <template #headerCell="{ column }">
-        <!-- Image col -->
-        <template v-if="column.dataIndex === 'image'">
-          <span class="tw-font-bold"> Image </span>
-        </template>
-
-        <!-- Name col -->
-        <template v-if="column.dataIndex === 'name'">
-          <span class="tw-font-bold"> Name </span>
-        </template>
-
-        <!-- Price col -->
-        <template v-if="column.dataIndex === 'price'">
-          <span class="tw-font-bold"> Price </span>
-        </template>
+        <span class="tw-font-bold"> {{ column.title }} </span>
       </template>
 
-      <!-- Cells -->
       <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex === 'image'">
-          <img            
+        <template v-if="column.dataIndex === 'name'">
+          <div class="tw-block tw-truncate tw-overflow-ellipsis">
+            <a>
+              {{ record.name }}
+            </a>
+          </div>
+        </template>
+        <template v-else-if="column.dataIndex === 'image'">
+          <img
             :src="stockStore.getProductImage(record.image)"
             lazy-src="https://picsum.photos/id/11/10/6"
             aspect-ratio="1"
@@ -31,12 +27,46 @@
             height="50"
           />
         </template>
+        <template v-else-if="column.dataIndex === 'price'">
+          <span>{{ filters.currency(record.price) }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'stock'">
+          <a-tag>{{ record.stock }} pcs</a-tag>
+        </template>
+        <template v-else-if="column.dataIndex === 'createdAt'">
+          <span class="tw-text-gray-600">{{
+            filters.formatDate(record.createdAt)
+          }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'updatedAt'">
+          <span class="tw-text-gray-600">{{ record.updatedAt }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'action'">
+          <a-row align="center">
+            <a-button
+              class="tw-bg-[#ffd155ff] tw-border-[#ffd155ff] tw-text-white"
+              @click="$router.push(`/stock-edit/${record.id}`)"
+            >
+              <EditFilled class="tw-pb-2" />
+            </a-button>
+
+            <a-popconfirm title="Are you sure？">
+              <template #icon><QuestionCircleOutlined /></template>
+              <a-button type="danger">
+                <DeleteFilled class="tw-pb-2"
+              /></a-button>
+            </a-popconfirm>
+          </a-row>
+        </template>
       </template>
     </a-table>
   </div>
 </template>
 <script lang="ts">
 import { useStockStore } from "@/stores/useStockStore";
+import filters from "@/services/filters";
+import { useRouter } from "vue-router";
+
 export default {
   setup() {
     const columns = [
@@ -77,6 +107,7 @@ export default {
     return {
       stockStore,
       columns,
+      filters,
     };
   },
 };
