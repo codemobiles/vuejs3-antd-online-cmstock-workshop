@@ -11,9 +11,9 @@ export const useStockStore = defineStore("stock", () => {
   const fetchingStatus = ref<FetchingStatus>(FetchingStatus.init);
 
   const loadProducts = async () => {
-    const result = await axios.get(
-      "http://localhost:8081/api/v2/" + server.PRODUCT_URL
-    );
+    // http interceptor
+    debugger;
+    const result = await axios.get(server.PRODUCT_URL);
     stocks.value = result.data;
   };
 
