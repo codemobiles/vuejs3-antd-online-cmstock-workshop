@@ -7,7 +7,7 @@ import httpClient from "@/services/httpClient";
 import api from "@/services/api";
 
 export const useStockStore = defineStore("stock", () => {
-  const autocompleteOptions = ref([]);
+  const autocompleteOptions = ref<string[]>([]);
   const stocks = ref<Product[]>([]);
   const fetchingStatus = ref<FetchingStatus>(FetchingStatus.init);
 
@@ -41,7 +41,21 @@ export const useStockStore = defineStore("stock", () => {
     alert("ok");
   };
 
+  const search = async (value: string) => {
+    debugger;
+    if (value) {
+      const result = await api.getProductByKeyword(value);
+      stocks.value = result.data;
+      autocompleteOptions.value = result.data.map((product: any) => ({
+        value: product.name,
+      }));
+    } else {
+      await loadProducts();
+    }
+  };
+
   return {
+    search,
     loadProducts,
     fetchingStatus,
     // getColorTagByStock,

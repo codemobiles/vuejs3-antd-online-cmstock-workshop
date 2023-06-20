@@ -17,6 +17,35 @@
       </StockCard>
     </a-col>
 
+    <!-- Toolbar -->
+    <a-col col :span="24" class="tw-mt-4">
+      <a-row class="tw-mb-4 tw-flex tw-flex-row">
+        <a-col class="tw-flex-1 tw-mr-3">
+          <a-auto-complete
+            class="tw-w-full tw-drop-shadow-sm hover:tw-drop-shadow-md tw-transition-all"
+            placeholder="Input search text"
+            :options="stockStore.autocompleteOptions"
+            @search="stockStore.search"
+            :defaultActiveFirstOption="false"
+            :filterOption="false"
+          />
+        </a-col>
+        <a-col>
+          <a-button
+            class="tw-w-full tw-drop-shadow-sm hover:tw-drop-shadow-md tw-transition-all"
+            type="primary"
+            @click="$router.push('/stock-create')"
+          >
+            <a-row justify="center" class="tw-items-center">
+              <PlusCircleFilled class="tw-pr-2 tw-hidden lg:tw-block" />
+              <span class="tw-pr-1">NEW </span>
+              <span class="tw-hidden lg:tw-block">PRODUCT</span>
+            </a-row>
+          </a-button>
+        </a-col>
+      </a-row>
+    </a-col>
+
     <!-- Table -->
     <a-col :span="24">
       <a-card
