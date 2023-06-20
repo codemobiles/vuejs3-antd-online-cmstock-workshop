@@ -5,6 +5,7 @@ import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
 import httpClient from "@/services/httpClient";
 import api from "@/services/api";
+import { debounce } from "lodash";
 
 export const useStockStore = defineStore("stock", () => {
   const autocompleteOptions = ref<string[]>([]);
@@ -41,6 +42,12 @@ export const useStockStore = defineStore("stock", () => {
     alert("ok");
   };
 
+  const searchWithDebounce = async (value: string) => {
+    debouncedSearch(value);
+  };
+
+  const debouncedSearch = debounce(async (value: string) => search(value), 500); // Adjust the debounce delay as needed
+
   const search = async (value: string) => {
     try {
       if (value) {
@@ -75,6 +82,7 @@ export const useStockStore = defineStore("stock", () => {
 
   return {
     search,
+    searchWithDebounce,
     loadProducts,
     fetchingStatus,
     // getColorTagByStock,
@@ -83,7 +91,6 @@ export const useStockStore = defineStore("stock", () => {
     isLoading,
     stocks,
     onSelect,
-    // debouncedSearch,
     onConfirmDelete,
     autocompleteOptions,
   };
