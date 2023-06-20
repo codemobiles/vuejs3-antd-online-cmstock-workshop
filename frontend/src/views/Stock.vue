@@ -105,6 +105,8 @@
   </a-row>
 </template>
 <script lang="ts">
+import { onMounted, onUnmounted } from "vue";
+
 import { useStockStore } from "@/stores/useStockStore";
 import StockCard from "@/components/cards/StockCard.vue";
 import filters from "@/services/filters";
@@ -193,7 +195,14 @@ export default {
     const stockStore = useStockStore();
     const router = useRouter();
 
-    stockStore.loadProducts();
+    // https://vuejs.org/api/composition-api-lifecycle.html
+    onMounted(() => {
+      stockStore.loadProducts();
+    });
+
+    onUnmounted(() => {
+      // alert("Are you sure?");
+    });
 
     const routeToEdit = (id: string) => {
       router.push(`/stock-edit/${id}`);
