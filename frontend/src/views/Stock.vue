@@ -25,6 +25,7 @@
         <a-table
           :columns="columns"
           :data-source="stockStore.stocks"
+          :loading="stockStore.isLoading()"
           :pagination="{ position: ['topRight'] }"
         >
           <template #headerCell="{ column }">
