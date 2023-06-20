@@ -3,7 +3,8 @@ import { Product } from "@/models/product.model";
 import { server } from "@/services/constants";
 import { defineStore } from "pinia";
 import { reactive, ref } from "vue";
-import axios from "axios";
+import httpClient from "@/services/httpClient";
+import api from "@/services/api";
 
 export const useStockStore = defineStore("stock", () => {
   const autocompleteOptions = ref([]);
@@ -11,9 +12,7 @@ export const useStockStore = defineStore("stock", () => {
   const fetchingStatus = ref<FetchingStatus>(FetchingStatus.init);
 
   const loadProducts = async () => {
-    // http interceptor
-    debugger;
-    const result = await axios.get(server.PRODUCT_URL);
+    const result = await api.getProducts();
     stocks.value = result.data;
   };
 
