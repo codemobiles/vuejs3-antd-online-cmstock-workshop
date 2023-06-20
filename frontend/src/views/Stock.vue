@@ -26,6 +26,7 @@
             placeholder="Input search text"
             :options="stockStore.autocompleteOptions"
             @search="stockStore.search"
+            @select="stockStore.onSelect"
             :defaultActiveFirstOption="false"
             :filterOption="false"
           />

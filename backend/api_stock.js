@@ -92,4 +92,27 @@ router.get("/product/id/:id", async (req, res) => {
   }
 });
 
+router.get("/product/name/:keyword", async (req, res) => {
+  console.log("get products by keyword");
+  try {
+    let keyword = req.params.keyword;
+    console.log(keyword);
+    const result = await product.findAll({
+      where: Sequelize.where(
+        Sequelize.fn("LOWER", Sequelize.col("name")),
+        "LIKE",
+        `%${keyword.toLowerCase()}%`
+      ),
+    });
+    if (result) {
+      res.json(result);
+    } else {
+      res.json([]);
+    }
+  } catch (error) {
+    console.log(error);
+    res.json([]);
+  }
+});
+
 module.exports = router;

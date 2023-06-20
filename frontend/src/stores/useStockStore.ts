@@ -42,15 +42,34 @@ export const useStockStore = defineStore("stock", () => {
   };
 
   const search = async (value: string) => {
-    debugger;
-    if (value) {
-      const result = await api.getProductByKeyword(value);
-      stocks.value = result.data;
-      autocompleteOptions.value = result.data.map((product: any) => ({
-        value: product.name,
-      }));
-    } else {
-      await loadProducts();
+    try {
+      if (value) {
+        const result = await api.getProductByKeyword(value);
+        stocks.value = result.data;
+        autocompleteOptions.value = result.data.map((product: any) => ({
+          value: product.name,
+        }));
+      } else {
+        await loadProducts();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const onSelect = async (value: any) => {
+    setLoading(FetchingStatus.fetching);
+    try {
+      if (value) {
+        const result = await api.getProductByKeyword(value);
+        stocks.value = result.data;
+      } else {
+        loadProducts();
+      }
+    } finally {
+      setTimeout(() => {
+        setLoading(FetchingStatus.success);
+      }, 1000);
     }
   };
 
@@ -63,7 +82,7 @@ export const useStockStore = defineStore("stock", () => {
     getProductImage,
     isLoading,
     stocks,
-    // onSelect,
+    onSelect,
     // debouncedSearch,
     onConfirmDelete,
     autocompleteOptions,
