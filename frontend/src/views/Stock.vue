@@ -79,9 +79,18 @@
 
                 <a-popconfirm
                   title="Are you sure？"
+                  okText="Confirm"
                   @confirm="stockStore.onConfirmDelete(record.id)"
                 >
                   <template #icon><QuestionCircleOutlined /></template>
+                  <template #okButton
+                    ><a-button
+                      type="danger"
+                      size="small"
+                      @click="stockStore.onConfirmDelete(record.id)"
+                      >Confirm</a-button
+                    ></template
+                  >
                   <a-button type="danger">
                     <DeleteFilled class="tw-pb-2"
                   /></a-button>
