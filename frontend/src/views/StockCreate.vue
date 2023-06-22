@@ -75,8 +75,6 @@
           </a-row>
         </a-form-item>
       </a-form>
-
-      <span @click="formState.name = ''">#Debug: {{ formState }}</span>
     </a-card>
   </a-row>
 </template>
@@ -87,12 +85,14 @@ import api from "@/services/api";
 import router from "@/router";
 import type { Rule } from "ant-design-vue/lib/form";
 import { PlusCircleFilled } from "@ant-design/icons-vue";
+import { useStockStore } from "@/stores/useStockStore";
 
 export default defineComponent({
   components: {
     PlusCircleFilled,
   },
   setup() {
+    const stockStore = useStockStore();
     const previewVisible = ref(false);
     const previewTitle = ref("");
     const formState = reactive({
@@ -104,7 +104,8 @@ export default defineComponent({
     });
 
     const onSubmit = async () => {
-      alert(JSON.stringify(formState));
+      await stockStore.createProduct(formState);
+      router.back();
     };
 
     const onFileSelected = (event: any) => {
@@ -117,7 +118,7 @@ export default defineComponent({
       reader.readAsDataURL(event.target.files[0]);
 
       // // for upload
-      // formState.image = event.target.files[0];
+      formState.image = event.target.files[0];
     };
 
     const handleCancel = () => {
@@ -126,7 +127,7 @@ export default defineComponent({
     };
 
     const validateText = (rule: Rule, value: string) => {
-      if (value === "" || value.length < 10) {
+      if (value === "" || value.length < 5) {
         return Promise.reject("Name is not valid");
       }
       return Promise.resolve();
@@ -149,6 +150,7 @@ export default defineComponent({
     const rules = {
       name: [{ required: true, validator: validateText, trigger: "change" }],
       price: [{ validator: validatePrice, trigger: "change" }],
+      stock: [{ validator: validateStock, trigger: "change" }],
     };
 
     return {
