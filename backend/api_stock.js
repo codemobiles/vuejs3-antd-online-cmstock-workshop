@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const product = require("./models/product");
-const Sequelize = require("sequelize");
+const { Sequelize, Op, fn, col } = require("sequelize");
 const formidable = require("formidable");
 const path = require("path");
 const fs = require("fs-extra");
@@ -13,17 +13,18 @@ router.get("/product", async (req, res) => {
 });
 
 // Upload Image
-uploadImage = async (files, doc) => {
+const uploadImage = async (files, doc) => {
   if (files.image != null) {
-    var fileExtention = files.image.name.split(".")[1];
+    var fileExtention = files.image.originalFilename.split(".")[1];
     doc.image = `${doc.id}.${fileExtention}`;
     var newpath =
       path.resolve(__dirname + "/uploaded/images/") + "/" + doc.image;
+    console.log(newpath);
 
     if (fs.exists(newpath)) {
       await fs.remove(newpath);
     }
-    await fs.moveSync(files.image.path, newpath);
+    await fs.moveSync(files.image.filepath, newpath);
 
     // Update database
     let result = product.update(
@@ -53,6 +54,7 @@ router.post("/product", (req, res) => {
 router.put("/product", (req, res) => {
   try {
     const form = new formidable.IncomingForm();
+
     form.parse(req, async (error, fields, files) => {
       let result = await product.update(fields, { where: { id: fields.id } });
       result = await uploadImage(files, fields);

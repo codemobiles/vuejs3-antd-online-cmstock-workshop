@@ -34,12 +34,22 @@ export const useStockStore = defineStore("stock", () => {
     return fetchingStatus.value == FetchingStatus.fetching;
   };
 
+  const getColorTagByStock = (stock: number) => {
+    if (stock >= 20) {
+      return "success";
+    } else if (stock >= 10) {
+      return "warning";
+    }
+    return "error";
+  };
+
   const getProductImage = (image: string) => {
     return "http://localhost:8081/images/" + image;
   };
 
-  const onConfirmDelete = (id: string) => {
-    alert("ok");
+  const onConfirmDelete = async (id: string) => {
+    await api.deleteProduct(id);
+    await loadProducts();
   };
 
   const searchWithDebounce = async (value: string) => {
@@ -85,7 +95,7 @@ export const useStockStore = defineStore("stock", () => {
     searchWithDebounce,
     loadProducts,
     fetchingStatus,
-    // getColorTagByStock,
+    getColorTagByStock,
     // setLoading,
     getProductImage,
     isLoading,

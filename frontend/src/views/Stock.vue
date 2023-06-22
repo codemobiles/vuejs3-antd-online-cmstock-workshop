@@ -87,7 +87,9 @@
               <span>{{ filters.currency(record.price) }}</span>
             </template>
             <template v-else-if="column.dataIndex === 'stock'">
-              <a-tag>{{ filters.thousand(record.stock) }} pcs</a-tag>
+              <a-tag :color="stockStore.getColorTagByStock(record.stock)"
+                >{{ filters.thousand(record.stock) }} pcs</a-tag
+              >
             </template>
             <template v-else-if="column.dataIndex === 'createdAt'">
               <span class="tw-text-gray-600">{{
