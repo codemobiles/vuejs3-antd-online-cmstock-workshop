@@ -50,6 +50,19 @@
                 class="tw-w-full tw-h-[300px] tw-object-contain"
               />
             </a-card>
+
+            <a-modal
+              :visible="previewVisible"
+              :title="previewTitle"
+              :footer="null"
+              @cancel="handleCancel"
+            >
+              <img
+                alt="preview image"
+                class="tw-w-full tw-h-[300px]"
+                :src="formState.imageURL!"
+              />
+            </a-modal>
           </a-row>
         </a-form-item>
 
@@ -101,9 +114,9 @@ export default defineComponent({
       reader.onload = (event: any) => {
         formState.imageURL = event.target.result;
       };
+      reader.readAsDataURL(event.target.files[0]);
 
       // // for upload
-      // reader.readAsDataURL(event.target.files[0]);
       // formState.image = event.target.files[0];
     };
 
