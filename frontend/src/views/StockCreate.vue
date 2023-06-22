@@ -14,9 +14,43 @@
       </template>
 
       <!-- card body -->
-      <a-form @finish="onSubmit">
+      <a-form
+        @finish="onSubmit"
+        :model="formState"
+        :label-col="{ span: 3 }"
+        :rules="rules"
+      >
         <a-form-item labelAlign="right" label="Name" name="name" has-feedback>
           <a-input v-model:value="formState.name" />
+        </a-form-item>
+        <a-form-item labelAlign="right" label="Price" name="price" has-feedback>
+          <a-input-number style="width: 100%" v-model:value="formState.price" />
+        </a-form-item>
+        <a-form-item labelAlign="right" label="Stock" name="stock" has-feedback>
+          <a-input-number
+            style="width: 100%"
+            type="number"
+            v-model:value="formState.stock"
+          />
+        </a-form-item>
+        <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+          <input type="file" @change="onFileSelected" />
+        </a-form-item>
+
+        <a-form-item :wrapper-col="{ span: 14, offset: 4 }">
+          <a-row align="center" justify="center" class="tw-w-full">
+            <a-card
+              v-if="formState.imageURL"
+              class="tw-rounded-md tw-drop-shadow-sm tw-w-full"
+              hoverable
+              @click="() => (previewVisible = true)"
+            >
+              <img
+                :src="formState.imageURL!"
+                class="tw-w-full tw-h-[300px] tw-object-contain"
+              />
+            </a-card>
+          </a-row>
         </a-form-item>
 
         <a-form-item :wrapper-col="{ span: 24 }">
@@ -29,7 +63,7 @@
         </a-form-item>
       </a-form>
 
-      <span @click="formState.name = ''">#Debug: {{ formState.name }}</span>
+      <span @click="formState.name = ''">#Debug: {{ formState }}</span>
     </a-card>
   </a-row>
 </template>
@@ -57,19 +91,20 @@ export default defineComponent({
     });
 
     const onSubmit = async () => {
-      alert("Submit");
+      alert(JSON.stringify(formState));
     };
 
     const onFileSelected = (event: any) => {
+      debugger;
       // for preview
       const reader = new FileReader();
       reader.onload = (event: any) => {
         formState.imageURL = event.target.result;
       };
 
-      // for upload
-      reader.readAsDataURL(event.target.files[0]);
-      formState.image = event.target.files[0];
+      // // for upload
+      // reader.readAsDataURL(event.target.files[0]);
+      // formState.image = event.target.files[0];
     };
 
     const handleCancel = () => {
@@ -78,8 +113,8 @@ export default defineComponent({
     };
 
     const validateText = (rule: Rule, value: string) => {
-      if (value === "") {
-        return Promise.reject("Please input the name");
+      if (value === "" || value.length < 10) {
+        return Promise.reject("Name is not valid");
       }
       return Promise.resolve();
     };
@@ -101,7 +136,6 @@ export default defineComponent({
     const rules = {
       name: [{ required: true, validator: validateText, trigger: "change" }],
       price: [{ validator: validatePrice, trigger: "change" }],
-      stock: [{ validator: validateStock, trigger: "change" }],
     };
 
     return {
