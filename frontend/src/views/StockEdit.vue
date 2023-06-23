@@ -13,13 +13,13 @@
         </a-tag>
       </template>
       <a-form :label-col="labelCol" :wrapper-col="wrapperCol">
-        <a-form-item label="Name">
+        <a-form-item label="Name" v-bind="validateInfos.name">
           <a-input v-model:value="formState.name" />
         </a-form-item>
-        <a-form-item label="Price">
+        <a-form-item label="Price" v-bind="validateInfos.price">
           <a-input-number style="width: 100%" v-model:value="formState.price" />
         </a-form-item>
-        <a-form-item label="Stock">
+        <a-form-item label="Stock" v-bind="validateInfos.stock">
           <a-input-number
             style="width: 100%"
             type="number"
@@ -84,6 +84,7 @@ import { Form } from "ant-design-vue";
 import api from "@/services/api";
 import filters from "@/services/filters";
 import { EditFilled } from "@ant-design/icons-vue";
+import { useStockStore } from "@/stores/useStockStore";
 import { useRoute, useRouter } from "vue-router";
 const useForm = Form.useForm;
 
@@ -102,6 +103,7 @@ export default {
     const router = useRouter();
     const previewVisible = ref(false);
     const previewTitle = ref("");
+    const stockStore = useStockStore();
     const formState = reactive({
       id: "",
       name: "",
@@ -123,7 +125,29 @@ export default {
       formState.image = event.target.files[0];
     };
 
-    const { initialModel, resetFields } = useForm(formState);
+    const { initialModel, resetFields, validate, validateInfos } = useForm(
+      formState,
+      reactive({
+        name: [
+          {
+            required: true,
+            message: "Please input name",
+          },
+        ],
+        price: [
+          {
+            required: true,
+            message: "Please input price",
+          },
+        ],
+        stock: [
+          {
+            required: true,
+            message: "Please input stock",
+          },
+        ],
+      })
+    );
 
     // ADD initModel (initialModel is attribute from useForm)
     const setInitialModel = (form: stockFormInterface) => {
@@ -165,8 +189,14 @@ export default {
       setInitialModel(result.data);
     });
 
-    const onSubmit = () => {
-      router.back();
+    const onSubmit = async () => {
+      try {
+        await validate();
+        await stockStore.editProduct(formState);
+        router.back();
+      } catch (e) {
+        alert("Error");
+      }
     };
 
     return {
@@ -180,6 +210,7 @@ export default {
       previewTitle,
       onSubmit,
       resetFields,
+      validateInfos,
     };
   },
 };
