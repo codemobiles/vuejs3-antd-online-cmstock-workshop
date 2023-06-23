@@ -3,7 +3,9 @@
     <a-col>
       <a-card class="tw-rounded-md tw-drop-shadow-sm" type="inner">
         <template #title>
-          <span class="tw-font-bold tw-text-[1.5rem] tw-block">Earning Report</span>
+          <span class="tw-font-bold tw-text-[1.5rem] tw-block"
+            >Earning Report</span
+          >
         </template>
         <DoughnutChart
           ref="doughnutRef"
@@ -17,39 +19,39 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, ref } from 'vue'
-import { DoughnutChart } from 'vue-chart-3'
-import { Chart, registerables } from 'chart.js'
+import { computed, defineComponent, ref } from "vue";
+import { DoughnutChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
 
-Chart.register(...registerables)
+Chart.register(...registerables);
 
 const props = defineProps({
-  data: Array
-})
+  data: Array,
+});
 
-const doughnutRef = ref()
+const doughnutRef = ref();
 
 const options = ref({
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
-      display: true
+      position: "top",
+      display: true,
     },
     title: {
       display: false,
-      text: 'Earning'
-    }
-  }
-})
+      text: "Earning",
+    },
+  },
+});
 
-const testData = computed(() => ({
-  labels: ['Commissions', 'Donation', 'Sales'],
+const testData = {
+  labels: ["Commissions", "Donation", "Sales"],
   datasets: [
     {
       data: props.data as any,
-      backgroundColor: ['#A9E4EF', '#81F495', '#96F550']
-    }
-  ]
-}))
+      backgroundColor: ["#A9E4EF", "#81F495", "#96F550"],
+    },
+  ],
+};
 </script>

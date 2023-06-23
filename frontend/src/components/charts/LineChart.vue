@@ -12,51 +12,64 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, ref,  } from 'vue'
-import { LineChart } from 'vue-chart-3'
-import { Chart, registerables } from 'chart.js'
+import { computed, defineComponent, ref } from "vue";
+import { LineChart } from "vue-chart-3";
+import { Chart, registerables } from "chart.js";
 
-Chart.register(...registerables)
+Chart.register(...registerables);
 
 const props = defineProps({
-  data: Array
-})
+  data: Array,
+});
 
-const lineRef = ref()
+const lineRef = ref();
 const options = ref({
   responsive: true,
   plugins: {
     legend: {
-      position: 'top',
-      display: false
+      position: "top",
+      display: false,
     },
     title: {
       display: false,
-      text: 'Overview'
-    }
-  }
-})
+      text: "Overview",
+    },
+  },
+});
 
-const testData = computed(() => ({
-  labels: ['Jan', 'Feb', 'March', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+const testData = {
+  labels: [
+    "Jan",
+    "Feb",
+    "March",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
   datasets: [
     {
       data: props.data as any,
       backgroundColor: [
-        '#7A306C',
-        '#8E8DBE',
-        '#A9E4EF',
-        '#81F495',
-        '#96F550',
-        '#EF476F',
-        '#FFD166',
-        '#06D6A0',
-        '#118AB2',
-        '#073B4C',
-        '#0B132B',
-        '#96F550'
-      ]
-    }
-  ]
-}))
+        "#7A306C",
+        "#8E8DBE",
+        "#A9E4EF",
+        "#81F495",
+        "#96F550",
+        "#EF476F",
+        "#FFD166",
+        "#06D6A0",
+        "#118AB2",
+        "#073B4C",
+        "#0B132B",
+        "#96F550",
+      ],
+    },
+  ],
+};
 </script>
