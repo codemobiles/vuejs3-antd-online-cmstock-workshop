@@ -126,7 +126,7 @@ export default {
     const { initialModel, resetFields } = useForm(formState);
 
     // ADD initModel (initialModel is attribute from useForm)
-    const setInitModel = (form: stockFormInterface) => {
+    const setInitialModel = (form: stockFormInterface) => {
       initialModel.id = form.id;
       initialModel.name = form.name;
       initialModel.price = form.price;
@@ -143,13 +143,15 @@ export default {
       }
     };
 
-    const setInitFormState = (form: stockFormInterface) => {
+    const setFormState = (form: stockFormInterface) => {
       formState.id = form.id;
       formState.name = form.name;
       formState.price = form.price;
       formState.stock = form.stock;
       formState.image = form.image as any;
       formState.imageURL = getProductImage(form.image) as any;
+
+      previewTitle.value = form.name;
     };
 
     const handleCancel = () => {
@@ -159,11 +161,13 @@ export default {
 
     onMounted(async () => {
       const result = await api.getProductById(route.params.id);
-      setInitFormState(result.data);
-      setInitModel(result.data);
+      setFormState(result.data);
+      setInitialModel(result.data);
     });
 
-    const onSubmit = () => {};
+    const onSubmit = () => {
+      router.back();
+    };
 
     return {
       route,
