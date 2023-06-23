@@ -12,10 +12,12 @@
     "@ant-design/icons-vue": "^6.1.0",
     "ant-design-vue": "^3.2.15",
     "axios": "^1.2.1",
+    "chart.js": "^4.3.0",
     "lodash": "^4.17.21",
     "pinia": "^2.0.28",
     "url-join": "^5.0.0",
     "vue": "^3.2.41",
+    "vue-chart-3": "^3.1.8",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

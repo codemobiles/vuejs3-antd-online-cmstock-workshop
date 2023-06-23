@@ -84,8 +84,8 @@ import { Form } from "ant-design-vue";
 import api from "@/services/api";
 import filters from "@/services/filters";
 import { EditFilled } from "@ant-design/icons-vue";
-import { useStockStore } from "@/stores/useStockStore";
 import { useRoute, useRouter } from "vue-router";
+import { useStockStore } from "@/stores/useStockStore";
 const useForm = Form.useForm;
 
 interface stockFormInterface {
@@ -99,11 +99,11 @@ interface stockFormInterface {
 
 export default {
   setup() {
+    const stockStore = useStockStore();
     const route = useRoute();
     const router = useRouter();
     const previewVisible = ref(false);
     const previewTitle = ref("");
-    const stockStore = useStockStore();
     const formState = reactive({
       id: "",
       name: "",
@@ -132,6 +132,10 @@ export default {
           {
             required: true,
             message: "Please input name",
+          },
+          {
+            min: 5,
+            message: "Name must be at least 5 characters",
           },
         ],
         price: [
@@ -195,7 +199,7 @@ export default {
         await stockStore.editProduct(formState);
         router.back();
       } catch (e) {
-        alert("Error");
+        alert("Submit information is not valid");
       }
     };
 

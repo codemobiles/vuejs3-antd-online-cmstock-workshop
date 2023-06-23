@@ -56,6 +56,8 @@ export const useStockStore = defineStore("stock", () => {
     await api.addProduct(formData);
   };
 
+  
+
   const editProduct = async (data: any) => {
     const formData = new FormData();
     const { name, price, stock, image, id } = data;
