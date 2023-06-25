@@ -1,20 +1,28 @@
 <template>
-  <a-layout-header class="bg-green-700 pl-7 pr-5 text-white">
-    <div style="display: flex; flex-direction: row; align-items: center">
-      <menu-unfold-outlined
-        v-if="collapsed"
-        class="trigger"
-        @click="toggleCollapsed"
-      />
-      <menu-fold-outlined v-else class="trigger" @click="toggleCollapsed" />
-      <span style="flex-grow: 1; margin-left: 10px; font-size: 18px"
-        >CMStock</span
-      >
-      <a-button type="text" class="p-0" @click="authStore.logout">
-        <LogoutOutlined style="color: white" class="trigger" />
-        <span style="color: white; font-size: 18px">Logout</span>
-      </a-button>
-    </div>
+  <a-layout-header class="tw-p-0 tw-bg-green-600 tw-text-white">
+    <a-row justify="space-between" align="center" class="tw-mx-6">
+      <a-row align="center" class="tw-items-center">
+        <MenuUnfoldOutlined
+          v-if="collapsed"
+          class="trigger tw-text-xl tw-transition-all hover:tw-text-green-300"
+          @click="toggleCollapsed"
+        />
+        <MenuFoldOutlined
+          v-else
+          class="trigger tw-text-xl tw-transition-all hover:tw-text-green-300"
+          @click="toggleCollapsed"
+        />
+        <span class="tw-px-2 tw-font-bold tw-text-xl">CMStock</span>
+      </a-row>
+      <div>
+        <a-button type="text" @click="authStore.logout">
+          <a-row align="center" class="tw-items-center">
+            <LogoutOutlined class="tw-text-white tw-pr-2" />
+            <span class="tw-text-white"> Logout </span>
+          </a-row>
+        </a-button>
+      </div>
+    </a-row>
   </a-layout-header>
 </template>
 
