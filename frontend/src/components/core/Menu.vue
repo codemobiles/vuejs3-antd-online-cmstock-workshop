@@ -1,83 +1,156 @@
 <template>
   <a-layout-sider
-    :collapsed="collapsed"
-    :trigger="null"
-    collapsible
-    style="
-      background: url(src/assets/bg-menu-2.png);
-      background-color: #213140 !important;
-      background-repeat: no-repeat;
-      background-size: cover;
-    "
+    hasSider
+    v-model:collapsed="props.collapsed"
+    class="tw-bg-[url('@/assets/bg-menu-2.png')] tw-bg-no-repeat tw-bg-[#83fface5] tw-bg-contain tw-bg-bottom tw-relative"
+    breakpoint="xl"
+    @collapse="onCollapse"
   >
-    <img
-      @click="toggleCollapsed"
-      src="@/assets/05-banner-vuejs.png"
-      alt=""
-      style="width: 100%"
-    />
+    <div>
+      <img src="@/assets/05-banner-vuejs.png" alt="logo" class="tw-w-full" />
+    </div>
     <a-menu
+      v-model:openKeys="openKeys"
       v-model:selectedKeys="selectedKeys"
-      theme="dark"
       mode="inline"
-      style="background-color: transparent"
+      @select="routeToPath"
+      class="tw-rounded-b-lg tw-p-2 tw-bg-transparent"
     >
-      <a-menu-item key="1" @click="router.push('/stock')">
-        <CodepenOutlined />
-        <span>Stock</span>
-      </a-menu-item>
-      <a-menu-item key="2" @click="$router.push('/report')">
-        <LineChartOutlined />
-        <span>Report</span>
-      </a-menu-item>
+      <template v-for="(item, i) in menuList" :key="i">
+        <a-menu-item v-if="!item.isSub" :key="item.to" class="tw-rounded-md">
+          <template #icon>
+            <StockOutlined v-if="i == 0" />
+            <DatabaseOutlined v-if="i == 1" />
+          </template>
+          {{ item.name }}
+        </a-menu-item>
+        <template v-else>
+          <a-sub-menu :key="`submenu${i}`" class="tw-rounded-md">
+            <template #icon>
+              <CalendarOutlined />
+            </template>
+            <template #title>{{ item.name }} </template>
+            <a-menu-item
+              v-for="(sub, j) in item.options"
+              :key="sub.to"
+              class="tw-rounded-md"
+            >
+              {{ sub.name }}
+            </a-menu-item>
+          </a-sub-menu>
+        </template>
+      </template>
     </a-menu>
   </a-layout-sider>
 </template>
-
 <script lang="ts">
-import { ref } from "vue";
-import * as Icons from "@ant-design/icons-vue";
-import { useRouter } from "vue-router";
-export default {
-  name: "Menu",
-  props: ["collapsed"],
-  emits: ["update:collapsed"],
+import router from "@/router";
+import {
+  StockOutlined,
+  DatabaseOutlined,
+  MailOutlined,
+  CalendarOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
+} from "@ant-design/icons-vue";
+import { defineComponent, reactive, ref, toRefs } from "vue";
+
+export default defineComponent({
   components: {
-    ...Icons,
+    StockOutlined,
+    DatabaseOutlined,
+    MailOutlined,
+    CalendarOutlined,
+    AppstoreOutlined,
+    SettingOutlined,
+  },
+  props: {
+    collapsed: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup(props, { emit }) {
-    const selectedKeys = ref<string[]>(["2"]);
-    const router = useRouter();
+    const state = reactive({
+      selectedKeys: ["1"],
+      openKeys: ["sub1"],
+    });
 
-    const toggleCollapsed = () => {
-      emit("update:collapsed", !props.collapsed);
+    const menuList = [
+      { name: "Stock", to: "/stock", isSub: false },
+      { name: "Report", to: "/report", isSub: false },
+      {
+        name: "Navigation 3",
+        options: [
+          { name: "Option 1", to: "/nav3-op-1" },
+          { name: "Option 2", to: "/nav3-op-2" },
+        ],
+        isSub: true,
+      },
+      {
+        name: "Navigation 4",
+        options: [
+          { name: "Option 1", to: "/nav4-op-1" },
+          { name: "Option 2", to: "/nav4-op-2" },
+          { name: "Option 2", to: "/nav4-op-3" },
+        ],
+        isSub: true,
+      },
+      {
+        name: "Navigation 5",
+        options: [
+          { name: "Option 1", to: "/nav5-op-1" },
+          { name: "Option 2", to: "/nav5-op-2" },
+          { name: "Option 2", to: "/nav5-op-3" },
+          { name: "Option 2", to: "/nav5-op-4" },
+        ],
+        isSub: true,
+      },
+      {
+        name: "Navigation 6",
+        options: [
+          { name: "Option 1", to: "/nav6-op-1" },
+          { name: "Option 2", to: "/nav6-op-2" },
+          { name: "Option 2", to: "/nav6-op-3" },
+          { name: "Option 2", to: "/nav6-op-4" },
+        ],
+        isSub: true,
+      },
+      {
+        name: "Navigation 7",
+        options: [
+          { name: "Option 1", to: "/nav7-op-1" },
+          { name: "Option 2", to: "/nav7-op-2" },
+          { name: "Option 2", to: "/nav7-op-3" },
+          { name: "Option 2", to: "/nav7-op-4" },
+        ],
+        isSub: true,
+      },
+    ];
+
+    const routeToPath = () => {
+      router.push(state.selectedKeys[0]);
     };
 
-    return { selectedKeys, toggleCollapsed, router };
+    const onCollapse = (collapsed: boolean, type: string) => {
+      if (type == "responsive") {
+        emit("update:collapsed", !props.collapsed);
+      }
+    };
+
+    return {
+      ...toRefs(state),
+      state,
+      menuList,
+      routeToPath,
+      props,
+      onCollapse,
+    };
   },
-};
+});
 </script>
-
 <style>
-#components-layout-demo-custom-trigger .trigger {
-  font-size: 18px;
-  line-height: 64px;
-  padding: 0 24px;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-#components-layout-demo-custom-trigger .trigger:hover {
-  color: #1890ff;
-}
-
-.logo {
-  height: 32px;
-  background: rgba(255, 255, 255, 0.3);
-  margin: 16px;
-}
-
-.site-layout .site-layout-background {
-  background: #fff;
+.ant-menu-sub.ant-menu-inline {
+  background: transparent !important;
 }
 </style>
