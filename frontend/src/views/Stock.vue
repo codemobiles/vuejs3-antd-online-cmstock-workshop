@@ -1,12 +1,12 @@
 <template>
-  <a-row justify="space-around" align="center">
+  <a-row justify="space-around" align="center" class="tw-w-full tw-h-full">
     <!-- Head -->
     <a-col
       :span="12"
       :lg="6"
       v-for="(item, i) in stockCardList"
       :key="i"
-      class="tw-mb-2 tw-px-2"
+      class="tw-mb-2 tw-pr-2"
     >
       <StockCard
         :title="item.title"
@@ -53,10 +53,15 @@
         class="tw-rounded-md tw-drop-shadow-sm hover:tw-drop-shadow-md tw-transition-all tw-relative"
       >
         <a-table
+          size="small"
           :columns="columns"
           :data-source="stockStore.stocks"
           :loading="stockStore.isLoading()"
-          :pagination="{ position: ['topRight'] }"
+          :pagination="{ position: ['topRight'], pageSize: pageSizeComputed }"
+          :scroll="{
+            x: 'max-content',
+            y: '50vh',
+          }"
         >
           <template #headerCell="{ column }">
             <template v-if="column.dataIndex === 'name'">
@@ -137,12 +142,12 @@
   </a-row>
 </template>
 <script lang="ts">
-import { onMounted, onUnmounted } from "vue";
+import { computed, onMounted, onUnmounted } from "vue";
 
 import { useStockStore } from "@/stores/useStockStore";
 import StockCard from "@/components/cards/StockCard.vue";
 import filters from "@/services/filters";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import {
   PlusCircleFilled,
   EditFilled,
@@ -150,6 +155,7 @@ import {
   QuestionCircleOutlined,
   DeleteOutlined,
 } from "@ant-design/icons-vue";
+import useBreakpoint from "ant-design-vue/lib/_util/hooks/useBreakpoint";
 
 export default {
   components: {
@@ -226,6 +232,13 @@ export default {
 
     const stockStore = useStockStore();
     const router = useRouter();
+    const route = useRoute();
+    const breakpoint = useBreakpoint();
+    const pageSizeComputed = computed(() => {
+      if (breakpoint.value.xs || breakpoint.value.sm || breakpoint.value.md)
+        return 5;
+      return 7;
+    });
 
     // https://vuejs.org/api/composition-api-lifecycle.html
     onMounted(() => {
@@ -246,6 +259,7 @@ export default {
       stockStore,
       columns,
       filters,
+      pageSizeComputed,
     };
   },
 };

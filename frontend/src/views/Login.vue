@@ -2,11 +2,8 @@
   <div>
     <a-card
       hoverable
-      style="
-        box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px 0px;
-        width: 300px;
-        height: 520px;
-      "
+      style="box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 5px 0px"
+      class="tw-max-w-[500px] tw-h-full"
     >
       <template #cover>
         <img alt="example" src="@/assets/03-vuejs-login.png" />

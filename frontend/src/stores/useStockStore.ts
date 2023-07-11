@@ -2,7 +2,7 @@ import { FetchingStatus } from "@/models/fetchingStatus.enum";
 import { Product } from "@/models/product.model";
 import { server } from "@/services/constants";
 import { defineStore } from "pinia";
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import httpClient from "@/services/httpClient";
 import api from "@/services/api";
 import { debounce } from "lodash";
@@ -55,8 +55,6 @@ export const useStockStore = defineStore("stock", () => {
     }
     await api.addProduct(formData);
   };
-
-  
 
   const editProduct = async (data: any) => {
     const formData = new FormData();
@@ -117,6 +115,17 @@ export const useStockStore = defineStore("stock", () => {
       }, 1000);
     }
   };
+
+  watch(
+    stocks,
+    () => {
+      // Update autocomplete options when stocks change
+      autocompleteOptions.value = stocks.value.map((product: Product) => ({
+        value: product.name,
+      })) as any;
+    },
+    { deep: true }
+  );
 
   return {
     search,

@@ -1,25 +1,19 @@
 <template>
-  <a-row>
-    <a-col>
-      <a-card class="tw-rounded-md tw-drop-shadow-sm" type="inner">
-        <template #title>
-          <span class="tw-font-bold tw-text-[1.5rem] tw-block"
-            >Earning Report</span
-          >
-        </template>
-        <DoughnutChart
-          ref="doughnutRef"
-          :chartData="testData"
-          :options="options"
-          class="tw-h-full md:tw-max-h-[300px]"
-        />
-      </a-card>
-    </a-col>
-  </a-row>
+  <a-card class="tw-rounded-md tw-drop-shadow-sm" type="inner">
+    <template #title>
+      <span class="tw-font-bold tw-text-[1.5rem] tw-block">Earning Report</span>
+    </template>
+    <DoughnutChart
+      ref="doughnutRef"
+      :chartData="testData"
+      :options="options"
+      class="tw-h-full md:tw-max-h-[300px]"
+    />
+  </a-card>
 </template>
 
 <script lang="ts" setup>
-import { computed, defineComponent, ref } from "vue";
+import { ref } from "vue";
 import { DoughnutChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
 

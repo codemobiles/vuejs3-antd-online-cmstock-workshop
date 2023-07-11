@@ -97,8 +97,8 @@ export default defineComponent({
     const previewTitle = ref("");
     const formState = reactive({
       name: "",
-      price: 2000,
-      stock: 20,
+      price: 0,
+      stock: 0,
       image: null,
       imageURL: null,
     });
